@@ -1,8 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../shared-styles.html">
+<link rel="import" href="my-dropdown.html">
 <link rel="import" href="../my-redux.html">
 
 <dom-module id="my-header">
@@ -27,7 +25,7 @@
         overflow: hidden;
         @apply(--layout-flex);
     }
-    .header-button, header-menu{
+    .header-button, my-dropdown{
         color: var(--text-navigation-color);
         font-size: 13px;
         line-height: 52px;
@@ -53,12 +51,12 @@
             <template is="dom-if" if="{{!loggedIn}}">
                 <a href="#" class="header-button" on-tap="_join">{{localize('join')}}</a>
                 <a href="#" class="header-button" on-tap="_logIn">{{localize('login')}}</a>
-                <paper-dropdown-menu class="custom" no-label-float value="{{language}}">
-                    <paper-listbox class="dropdown-content" selected="0">
-                        <paper-item>English</paper-item>
-                        <paper-item>中文</paper-item>
-                    </paper-listbox>
-                </paper-dropdown-menu>
+                <my-dropdown 
+                    menu-options="English, 中文" 
+                    selected="{{language}}" 
+                    columns="1" 
+                    caret>{{localize('languages')}}
+                </my-dropdown>
             </template>
         </div>
     </app-toolbar>
@@ -93,6 +91,7 @@
             },
             language:{
                 type: String,
+                value: 'English',
                 observer: '_language'
             }
         };

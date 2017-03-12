@@ -1,0 +1,191 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../my-redux.html">
+
+<dom-module id="my-dropdown">
+  <template>
+    <style include="shared-styles">
+        :host {
+            display: block;
+            white-space: nowrap;
+        }
+        iron-icon{
+            position: relative;
+            top: 12px;
+            left: 3px;
+        }
+        .drop-down-container{
+            display: var(--drop-down-display, none);
+        }
+        .animateIn{
+            opacity: 0;
+            animation: 200ms fadeIn;
+            animation-fill-mode: forwards;
+            position: relative;
+        }
+        .animateOut{
+            opacity: 0;
+            animation: 200ms fadeOut;
+            animation-fill-mode: forwards;
+            position: relative;
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translate(0px, 20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(0px, 0px);
+            }
+        }
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: translate(0px, 0px);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(0px, 20px);
+            }
+        }
+
+        .drop-down{
+            padding: 15px 15px 0px 15px;
+            position: absolute;
+            top: -7px;
+            right: 0px;
+            background-color: white;
+            width: var(--drop-down-width, 110px);
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, .25), 0 0 1px rgba(0,0,0,0.37);
+            @apply(--layout-horizontal);
+            @apply(--layout-wrap);
+        }
+        .container{
+            @apply(--layout-horizontal);
+            width: 100%;
+        }
+        .item{
+            width: 110px;
+            height: 30px;
+            font-weight: 400;
+            line-height: 15px;
+            opacity: 0.8;
+        }
+
+    </style>
+
+    <div on-tap="_openDropDown" on-mouseover="_openDropDown" on-mouseleave="_closeDropDown" class="container">
+        <slot></slot>
+        <template is="dom-if" if="{{caret}}">
+            <iron-icon icon="arrow-drop-down"></iron-icon>
+        </template>
+    </div>
+    <div class$="{{animate}} drop-down-container">
+        <div class="drop-down" on-mouseleave="_closeDropDown" on-mouseover="_openDropDown">
+            <template is="dom-repeat" items="{{optionsArray}}">
+                <div class="item" on-tap="_selected" id="{{item}}">{{item}}</div>
+            </template>
+        </div>
+    </div>
+
+  </template>
+
+  <script>
+    class MyDropdown extends ReduxMixin(Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element)) {
+
+    connectedCallback() {
+        super.connectedCallback();
+        this.loadResources(this.resolveUrl("../my-locales.json"));
+        this._menuOptions();
+    }
+
+    static get is() { 
+        return 'my-dropdown'; 
+    }
+
+
+    static get properties() {
+        return {
+            drawer: {
+                type: Boolean,
+                notify: true,
+            },
+            mobile: {
+                type: Boolean
+            },
+            columns: {
+                type: Number,
+                value: 1,
+                observer: '_columns'
+            },
+            menuOptions: {
+                type: Object,
+                observer: '_menuOptions'
+            },
+            selected: {
+                type: String,
+                notify: true,
+                reflectToAttribute: true
+            },
+            caret: {
+                type: Boolean,
+                value: false,
+            }
+        };
+    }
+
+        _width(){
+            this.updateStyles({
+                '--button-width': this.width
+            });
+        }
+        _selected(e){
+            this.selected = e.target.id;
+            this.timer = setTimeout(function(){ 
+                this.animate = 'animateOut'
+                this.timer = setTimeout(function(){ 
+                    this.updateStyles({
+                        '--drop-down-display': 'none'
+                    });
+                }.bind(this), 200); 
+            }.bind(this), 200); 
+        }
+        _menuOptions(e){
+            console.log(this.menuOptions);
+            //this.optionsArray = this.menuOptions.split(',');
+            this.optionsArray = ["English", "中文"]
+        }
+        _columns() {
+            if(this.columns == 2){
+                this.updateStyles({
+                    '--drop-down-width': '220px'
+                });
+            }
+        }
+        _openDropDown(){
+            clearTimeout(this.timer);
+            this.animate = 'animateIn'
+            this.updateStyles({
+                '--drop-down-display': 'block'
+            });      
+        }
+        _closeDropDown(){   
+            this.timer = setTimeout(function(){ 
+                this.animate = 'animateOut'
+                this.timer = setTimeout(function(){ 
+                    this.updateStyles({
+                        '--drop-down-display': 'none'
+                    });
+                }.bind(this), 200);  
+            }.bind(this), 200);
+        }
+
+    }
+    window.customElements.define(MyDropdown.is, MyDropdown);
+</script>
+</dom-module>
