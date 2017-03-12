@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../shared-styles.html">
+<link rel="import" href="../my-redux.html">
 
 <dom-module id="my-header">
   <template>
@@ -38,12 +39,10 @@
                 logged in
             </template>
             <template is="dom-if" if="{{!loggedIn}}">
-                <paper-dropdown-menu class="custom" no-label-float>
-                    <paper-listbox class="dropdown-content" selected="1">
-                        <paper-item>Croissant</paper-item>
-                        <paper-item>Donut</paper-item>
-                        <paper-item>Financier</paper-item>
-                        <paper-item>Madeleine</paper-item>
+                <paper-dropdown-menu class="custom" no-label-float value="{{language}}">
+                    <paper-listbox class="dropdown-content" selected="0">
+                        <paper-item>English</paper-item>
+                        <paper-item>中文</paper-item>
                     </paper-listbox>
                 </paper-dropdown-menu>
             </template>
@@ -53,9 +52,22 @@
   </template>
 
   <script>
-    class MyHeader extends Polymer.Element {
+    class MyHeader extends ReduxMixin(Polymer.mixinBehaviors(
+        [Polymer.AppLocalizeBehavior],
+        Polymer.Element)) {
 
-      static get is() { return 'my-header'; }
+    static get is() { 
+        return 'my-header'; 
+    }
+
+    static get actions() {
+        return Object.assign({
+            LANGUAGE: function(language){
+                return { type: 'LANGUAGE', language: language}
+            }
+        }
+        );
+    }
 
     static get properties() {
         return {
@@ -63,10 +75,20 @@
                 type: Boolean,
                 notify: true,
             },
+            language:{
+                type: String,
+                observer: '_language'
+            }
+
 
         };
       }
 
+      _language(){
+          if(this.language){
+              this.dispatch('LANGUAGE', this.language);
+          }
+      }
       _toggleDrawer(){
           this.drawer = !this.drawer;
       }

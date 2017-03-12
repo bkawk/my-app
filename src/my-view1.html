@@ -1,27 +1,52 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="my-redux.html">
 
 <dom-module id="my-view1">
   <template>
     <style include="shared-styles">
       :host {
         display: block;
-
+        width: 100%;
+        margin: auto;
+        max-width: var(--app-fixed-width);
         padding: 10px;
       }
     </style>
 
     <div class="card">
       <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
+      <h1>View One - {{setLanguage}}</h1>
+      <p>{{localize('name')}}  Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
       <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
     </div>
   </template>
 
   <script>
-    class MyView1 extends Polymer.Element {
-      static get is() { return 'my-view1'; }
+      class MyView1 extends ReduxMixin(Polymer.mixinBehaviors(
+        [Polymer.AppLocalizeBehavior],
+        Polymer.Element)) {
+      
+      connectedCallback() {
+          super.connectedCallback();
+          this.loadResources(this.resolveUrl("./my-locales.json"));
+      }
+      static get is() { 
+        return 'my-view1'; 
+      }
+      static get properties() {
+        return {
+            setLanguage: {
+                type: String,
+                statePath: 'language',
+                observer: '_language'
+            }
+        };
+      }
+      _language(){
+        this.language = this.setLanguage;
+      }
+
     }
 
     window.customElements.define(MyView1.is, MyView1);

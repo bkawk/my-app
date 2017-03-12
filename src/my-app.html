@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
@@ -53,7 +54,7 @@
 
       <!-- Main content -->
       <app-header-layout>
-        <app-header slot="header" condenses fixed effects="waterfall">
+        <app-header slot="header" condenses fixed effects="waterfall" id="appHeader">
             <my-header
               mobile="{{mobile}}"
               logged-in="{{loggedIn}}"
@@ -78,24 +79,26 @@
 
   <script>
 
-      class MyApp extends ReduxMixin(Polymer.Element) {
+      class MyApp extends ReduxMixin(Polymer.mixinBehaviors(
+        [Polymer.AppLocalizeBehavior],
+        Polymer.Element)) {
 
       static get is() { 
         return 'my-app'; 
       }
 
-        static get actions() {
-          return Object.assign({
-            USER: function(user){
-                return { type: 'USER', user: user}
-            },
-            MOBILE: function(mobile){
-                return { type: 'MOBILE', mobile: mobile}
-            }
+      static get actions() {
+        return Object.assign({
+          USER: function(user){
+              return { type: 'USER', user: user}
+          },
+          MOBILE: function(mobile){
+              return { type: 'MOBILE', mobile: mobile}
           }
-  
-          );
         }
+
+        );
+      }
 
       static get properties() {
         return {
@@ -111,6 +114,10 @@
           loggedIn: {
             type: Boolean,
             value: false,
+          },
+          setLanguage: {
+            type: String,
+            statePath: 'setLanguage',
           }
 
         };
@@ -121,10 +128,22 @@
           '_routePageChanged(routeData.page)',
         ];
       }
+
+      connectedCallback() {
+          super.connectedCallback();
+          this.loadResources(this.resolveUrl("./my-locales.json"));
+      }
+
       _mobile(){
         this.dispatch('MOBILE', this.mobile);
         if(!this.mobile){
           this.drawer = false
+        }
+        const header = this.$.appHeader;
+        if(this.mobile){
+            header.fixed = false;
+        } else {
+            header.fixed = true;
         }
       }
       _routePageChanged(page) {
@@ -144,7 +163,7 @@
 
       _pageChanged(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+        const resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
         Polymer.importHref(
             resolvedPageUrl,
             null,
