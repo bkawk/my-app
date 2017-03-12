@@ -27,6 +27,18 @@
         overflow: hidden;
         @apply(--layout-flex);
     }
+    .header-button, header-menu{
+        color: var(--text-navigation-color);
+        font-size: 13px;
+        line-height: 52px;
+        height: 52px;
+        padding: 0 10px;
+        font-weight: 400;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+        opacity: 0.8;
+    }
     </style>
 
     <app-toolbar class="toolbar">
@@ -39,6 +51,8 @@
                 logged in
             </template>
             <template is="dom-if" if="{{!loggedIn}}">
+                <a href="#" class="header-button" on-tap="_join">{{localize('join')}}</a>
+                <a href="#" class="header-button" on-tap="_logIn">{{localize('login')}}</a>
                 <paper-dropdown-menu class="custom" no-label-float value="{{language}}">
                     <paper-listbox class="dropdown-content" selected="0">
                         <paper-item>English</paper-item>
@@ -52,9 +66,12 @@
   </template>
 
   <script>
-    class MyHeader extends ReduxMixin(Polymer.mixinBehaviors(
-        [Polymer.AppLocalizeBehavior],
-        Polymer.Element)) {
+    class MyHeader extends ReduxMixin(Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element)) {
+
+    connectedCallback() {
+        super.connectedCallback();
+        this.loadResources(this.resolveUrl("../my-locales.json"));
+    }
 
     static get is() { 
         return 'my-header'; 
@@ -65,8 +82,7 @@
             LANGUAGE: function(language){
                 return { type: 'LANGUAGE', language: language}
             }
-        }
-        );
+        });
     }
 
     static get properties() {
@@ -79,21 +95,18 @@
                 type: String,
                 observer: '_language'
             }
-
-
         };
-      }
-
-      _language(){
-          if(this.language){
-              this.dispatch('LANGUAGE', this.language);
-          }
-      }
-      _toggleDrawer(){
-          this.drawer = !this.drawer;
-      }
     }
 
+        _language(){
+            if(this.language){
+                this.dispatch('LANGUAGE', this.language);
+            }
+        }
+        _toggleDrawer(){
+            this.drawer = !this.drawer;
+        }
+    }
     window.customElements.define(MyHeader.is, MyHeader);
-  </script>
+</script>
 </dom-module>
