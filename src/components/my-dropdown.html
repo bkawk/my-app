@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../shared-styles.html">
 <link rel="import" href="../my-redux.html">
 
@@ -78,7 +77,6 @@
         }
 
     </style>
-
     <div on-tap="_openDropDown" on-mouseover="_openDropDown" on-mouseleave="_closeDropDown" class="container">
         <slot></slot>
         <template is="dom-if" if="{{caret}}">
@@ -88,7 +86,7 @@
     <div class$="{{animate}} drop-down-container">
         <div class="drop-down" on-mouseleave="_closeDropDown" on-mouseover="_openDropDown">
             <template is="dom-repeat" items="{{optionsArray}}">
-                <div class="item" on-tap="_selected" id="{{item}}">{{item}}</div>
+                <div class="item" on-click="_selecteder" id="{{item}}">{{item}}</div>
             </template>
         </div>
     </div>
@@ -96,12 +94,11 @@
   </template>
 
   <script>
-    class MyDropdown extends ReduxMixin(Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element)) {
+    class MyDropdown extends ReduxMixin(Polymer.Element) {
 
     connectedCallback() {
         super.connectedCallback();
-        this.loadResources(this.resolveUrl("../my-locales.json"));
-        this._menuOptions();
+        this._menuoptions();
     }
 
     static get is() { 
@@ -123,14 +120,13 @@
                 value: 1,
                 observer: '_columns'
             },
-            menuOptions: {
-                type: Object,
-                observer: '_menuOptions'
-            },
-            selected: {
+            menuoptions: {
                 type: String,
-                notify: true,
-                reflectToAttribute: true
+                observer: '_menuoptions'
+            },
+            selecteder: {
+                type: String,
+                notify: true
             },
             caret: {
                 type: Boolean,
@@ -144,8 +140,8 @@
                 '--button-width': this.width
             });
         }
-        _selected(e){
-            this.selected = e.target.id;
+        _selecteder(e){
+            this.selecteder = e.target.id;
             this.timer = setTimeout(function(){ 
                 this.animate = 'animateOut'
                 this.timer = setTimeout(function(){ 
@@ -155,10 +151,8 @@
                 }.bind(this), 200); 
             }.bind(this), 200); 
         }
-        _menuOptions(e){
-            console.log(this.menuOptions);
-            //this.optionsArray = this.menuOptions.split(',');
-            this.optionsArray = ["English", "中文"]
+        _menuoptions(e){
+            this.optionsArray = this.menuoptions.split(',');
         }
         _columns() {
             if(this.columns == 2){
