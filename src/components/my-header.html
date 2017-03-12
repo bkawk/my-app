@@ -1,0 +1,77 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="my-header">
+  <template>
+    <style include="shared-styles">
+    :host {
+        display: block;
+        color: var(--app-secondary-color);
+        background-color: var(--app-primary-color);
+    }
+    .fixed-width {
+        width: 100%;
+        margin: auto;
+        max-width: var(--app-fixed-width);
+        height: var(--toolbar-height);
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+    }
+    .logo {
+        margin-top: 5px;
+        line-height: var(--toolbar-height);
+        overflow: hidden;
+        @apply(--layout-flex);
+    }
+    </style>
+
+    <app-toolbar class="toolbar">
+        <div class="fixed-width">
+            <template is="dom-if" if="{{mobile}}">
+                <paper-icon-button icon="menu" flat on-click="_toggleDrawer"></paper-icon-button>
+            </template>
+            <a href="/" class="logo"><img src="../../images/logo.svg" ></a>
+            <template is="dom-if" if="{{loggedIn}}">
+                logged in
+            </template>
+            <template is="dom-if" if="{{!loggedIn}}">
+                <paper-dropdown-menu class="custom" no-label-float>
+                    <paper-listbox class="dropdown-content" selected="1">
+                        <paper-item>Croissant</paper-item>
+                        <paper-item>Donut</paper-item>
+                        <paper-item>Financier</paper-item>
+                        <paper-item>Madeleine</paper-item>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+            </template>
+        </div>
+    </app-toolbar>
+
+  </template>
+
+  <script>
+    class MyHeader extends Polymer.Element {
+
+      static get is() { return 'my-header'; }
+
+    static get properties() {
+        return {
+            drawer: {
+                type: Boolean,
+                notify: true,
+            },
+
+        };
+      }
+
+      _toggleDrawer(){
+          this.drawer = !this.drawer;
+      }
+    }
+
+    window.customElements.define(MyHeader.is, MyHeader);
+  </script>
+</dom-module>

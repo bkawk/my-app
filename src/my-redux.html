@@ -1,0 +1,37 @@
+<link rel="import" href="../bower_components/polymer-redux/polymer-redux.html">
+
+<script>
+    var initialState = {
+        joinModal: false,
+        loginModal: false,
+    };
+    var reducer = function(state, action){
+        if(!state){ 
+            return initialState
+        };
+        switch(action.type){
+            case 'MOBILE':
+                var mobile = state.mobile;
+                mobile  = action.mobile;
+                return Object.assign({}, state, {mobile: mobile})
+            case 'USER':
+                var user = state.user;
+                user  = action.user;
+                return Object.assign({}, state, {user: user})
+            case 'LANGUAGE':
+                var language = state.language;
+                language  = action.language;
+                return Object.assign({}, state, {language: language})
+            case 'JOIN_MODAL':
+                var joinModal = state.joinModal;
+                joinModal  = action.joinModal;
+                return Object.assign({}, state, {joinModal: joinModal})
+            case 'LOGIN_MODAL':
+                var loginModal = state.loginModal;
+                loginModal  = action.loginModal;
+                return Object.assign({}, state, {loginModal: loginModal})
+        }
+    }
+    var store = Redux.createStore(reducer);
+    var ReduxMixin = PolymerRedux(store);
+</script>

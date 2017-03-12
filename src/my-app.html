@@ -1,0 +1,163 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="components/my-header.html">
+<link rel="import" href="my-redux.html">
+
+
+<dom-module id="my-app">
+  <template>
+    <style >
+      :host {
+        --app-primary-color: white;
+        --app-secondary-color: #6b717d;
+        display: block;
+      }
+
+    </style>
+
+    <firebase-app 
+        name="bkawkfirebase" 
+        api-key="AIzaSyAhoCXxkY-ffNwA_7L7HIwBVpASYj1btNE" 
+        auth-domain="convoo-login-demo.firebaseapp.com" 
+        database-url="https://convoo-login-demo.firebaseio.com"
+        storage-bucket="the-app-4e238.appspot.com",
+        messaging-sender-id="916383740318">
+    </firebase-app>
+
+    <iron-media-query query="max-width: 415px" query-matches="{{mobile}}"></iron-media-query>
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
+
+    <app-drawer-layout force-narrow>
+      <!-- Drawer content -->
+      <app-drawer id="drawer" slot="drawer" swipe-open opened="{{drawer}}">
+      </app-drawer>
+
+      <!-- Main content -->
+      <app-header-layout>
+        <app-header slot="header" condenses fixed effects="waterfall">
+            <my-header
+              mobile="{{mobile}}"
+              logged-in="{{loggedIn}}"
+              drawer="{{drawer}}">
+            </my-header>
+        </app-header>
+
+        <iron-pages
+            selected="[[page]]"
+            attr-for-selected="name"
+            fallback-selection="view404"
+            role="main">
+          <my-view1 name="view1"></my-view1>
+          <my-view2 name="view2"></my-view2>
+          <my-view3 name="view3"></my-view3>
+          <my-view404 name="view404"></my-view404>
+        </iron-pages>
+
+      </app-header-layout>
+    </app-drawer-layout>
+  </template>
+
+  <script>
+
+      class MyApp extends ReduxMixin(Polymer.Element) {
+
+      static get is() { 
+        return 'my-app'; 
+      }
+
+        static get actions() {
+          return Object.assign({
+            USER: function(user){
+                return { type: 'USER', user: user}
+            },
+            MOBILE: function(mobile){
+                return { type: 'MOBILE', mobile: mobile}
+            }
+          }
+  
+          );
+        }
+
+      static get properties() {
+        return {
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged',
+          },
+          mobile: {
+            type: Boolean,
+            observer: '_mobile',
+          },
+          loggedIn: {
+            type: Boolean,
+            value: false,
+          }
+
+        };
+      }
+
+      static get observers() {
+        return [
+          '_routePageChanged(routeData.page)',
+        ];
+      }
+      _mobile(){
+        this.dispatch('MOBILE', this.mobile);
+        if(!this.mobile){
+          this.drawer = false
+        }
+      }
+      _routePageChanged(page) {
+        // Polymer 2.0 will call with `undefined` on initialization.
+        // Ignore until we are properly called with a string.
+        if (page === undefined) {
+          return;
+        }
+
+        // If no page was found in the route data, page will be an empty string.
+        // Deault to 'view1' in that case.
+        this.page = page || 'view1';
+
+        // Close a non-persistent drawer when the page & route are changed.
+        this.drawer = false
+      }
+
+      _pageChanged(page) {
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+        Polymer.importHref(
+            resolvedPageUrl,
+            null,
+            this._showPage404.bind(this),
+            true);
+      }
+
+      _showPage404() {
+        this.page = 'view404';
+      }
+
+    }
+
+    window.customElements.define(MyApp.is, MyApp);
+  </script>
+</dom-module>
