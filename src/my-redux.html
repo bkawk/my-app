@@ -33,6 +33,9 @@
                 return Object.assign({}, state, {loginModal: loginModal})
         }
     }
-    const store = Redux.createStore(reducer);
+
+    const store = Redux.createStore(reducer, /* preloadedState, */
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    );
     const ReduxMixin = PolymerRedux(store);
 </script>
