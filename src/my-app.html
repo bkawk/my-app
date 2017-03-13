@@ -16,6 +16,8 @@
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="components/my-header.html">
+<link rel="import" href="components/my-invite.html">
+<link rel="import" href="components/my-login.html">
 <link rel="import" href="my-redux.html">
 
 
@@ -37,13 +39,18 @@
         messaging-sender-id="916383740318">
     </firebase-app>
 
-    <iron-media-query query="max-width: 415px" query-matches="{{mobile}}"></iron-media-query>
+    <iron-media-query query="max-width: 415px" query-matches="{{mobile}}"></iron-media-query>  
+
+    <template is="dom-if" if="{{showInvite}}"><my-invite></my-invite></template>
+    <template is="dom-if" if="{{showLogin}}"><my-login></my-login></template>
+
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
         pattern="/:page"
         data="{{routeData}}"
-        tail="{{subroute}}"></app-route>
+        tail="{{subroute}}">
+    </app-route>
 
     <app-drawer-layout force-narrow>
       <!-- Drawer content -->
@@ -56,11 +63,7 @@
             <my-header></my-header>
         </app-header>
 
-        <iron-pages
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="view404"
-            role="main">
+        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
           <my-view1 name="view1"></my-view1>
           <my-view2 name="view2"></my-view2>
           <my-view3 name="view3"></my-view3>
@@ -72,15 +75,11 @@
   </template>
 
   <script>
-
-      class MyApp extends ReduxMixin(Polymer.mixinBehaviors(
-        [Polymer.AppLocalizeBehavior],
-        Polymer.Element)) {
+    class MyApp extends ReduxMixin(Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element)) {
 
       static get is() { 
         return 'my-app'; 
       }
-
       static get actions() {
         return Object.assign({
           USER: function(user){
@@ -92,11 +91,8 @@
           DRAWER: function(drawer){
                 return { type: 'DRAWER', drawer: drawer}
           }
-        }
-
-        );
-      }
-
+      });
+    }
       static get properties() {
         return {
           page: {
@@ -116,25 +112,29 @@
             type: Boolean,
             statePath: 'drawer',
             observer: '_drawer',
+          },
+          showInvite: {
+            type: Boolean,
+            statePath: 'showInvite',
+          },
+          showLogin: {
+            type: Boolean,
+            statePath: 'showLogin',
           }
-
         };
       }
-
       static get observers() {
         return [
           '_routePageChanged(routeData.page)',
         ];
       }
-
-      connectedCallback() {
+      connectedCallback(){
           super.connectedCallback();
           this.loadResources(this.resolveUrl("./my-locales.json"));
       }
-        _drawer(){
+      _drawer(){
             this.dispatch('DRAWER', this.drawer);
-        }
-
+      }
       _mobile(){
         this.dispatch('MOBILE', this.mobile);
         if(!this.mobile){
@@ -147,16 +147,14 @@
             header.fixed = true;
         }
       }
-      _routePageChanged(page) {
+      _routePageChanged(page){
         if (page === undefined) {
           return;
         }
-
         this.page = page || 'view1';
         this.drawer = false
       }
-
-      _pageChanged(page) {
+      _pageChanged(page){
         const resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
         Polymer.importHref(
             resolvedPageUrl,
@@ -164,11 +162,9 @@
             this._showPage404.bind(this),
             true);
       }
-
-      _showPage404() {
+      _showPage404(){
         this.page = 'view404';
       }
-
     }
 
     window.customElements.define(MyApp.is, MyApp);

@@ -4,7 +4,7 @@
 <link rel="import" href="../my-redux.html">
 
 <dom-module id="my-header">
-  <template>
+<template>
     <style include="shared-styles">
     :host {
         display: block;
@@ -47,22 +47,26 @@
             <template is="dom-if" if="{{loggedIn}}">
                 logged in
             </template>
-            <template is="dom-if" if="{{!loggedIn}}">
-                <a href="#" class="header-button" on-tap="_join">{{localize('join')}}</a>
-                <a href="#" class="header-button" on-tap="_logIn">{{localize('login')}}</a>
-                <my-dropdown 
-                    options="English,中文" 
-                    selected="{{language}}" 
-                    columns="1" 
-                    caret>{{localize('languages')}}
-                </my-dropdown>
+        
+            <template is="dom-if" if="{{!mobile}}">
+                <template is="dom-if" if="{{!loggedIn}}">
+                    <a href="#" class="header-button" on-tap="_invite">{{localize('join')}}</a>
+                    <a href="#" class="header-button" on-tap="_logIn">{{localize('login')}}</a>
+                    <my-dropdown 
+                        options="English,中文" 
+                        selected="{{language}}" 
+                        columns="1" 
+                        caret>{{localize('languages')}}
+                    </my-dropdown>
+                </template>
             </template>
+
         </div>
     </app-toolbar>
 
-  </template>
+</template>
 
-  <script>
+<script>
     class MyHeader extends ReduxMixin(Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element)) {
 
     connectedCallback() {
@@ -81,6 +85,12 @@
             },
             DRAWER: function(drawer){
                 return { type: 'DRAWER', drawer: drawer}
+            },
+            SHOW_INVITE: function(showInvite){
+                return { type: 'SHOW_INVITE', showInvite: showInvite}
+            },
+            SHOW_LOGIN: function(showLogin){
+                return { type: 'SHOW_LOGIN', showLogin: showLogin}
             }
         });
     }
@@ -106,7 +116,12 @@
             },
         };
     }
-
+        _logIn(){
+            this.dispatch('SHOW_LOGIN', true);
+        }
+        _invite(){
+            this.dispatch('SHOW_INVITE', true);
+        }
         _language(){
             if(this.language){
                 this.dispatch('LANGUAGE', this.language);

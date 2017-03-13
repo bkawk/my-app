@@ -2,12 +2,13 @@
 
 <script>
     let initialState = {
-        joinModal: false,
-        loginModal: false,
+        showInvite: false,
+        showLogin: false,
         loggedIn: false,
         drawer: false,
         language: 'English',
     };
+
     let reducer = function(state, action){
         if(!state){ 
             return initialState
@@ -29,17 +30,16 @@
                 let language = state.language;
                 language  = action.language;
                 return Object.assign({}, state, {language: language})
-            case 'JOIN_MODAL':
-                let joinModal = state.joinModal;
-                joinModal  = action.joinModal;
-                return Object.assign({}, state, {joinModal: joinModal})
-            case 'LOGIN_MODAL':
-                let loginModal = state.loginModal;
-                loginModal  = action.loginModal;
-                return Object.assign({}, state, {loginModal: loginModal})
+            case 'SHOW_INVITE':
+                let showInvite = state.showInvite;
+                showInvite  = action.showInvite;
+                return Object.assign({}, state, {showInvite: showInvite})
+            case 'SHOW_LOGIN':
+                let showLogin = state.showLogin;
+                showLogin  = action.showLogin;
+                return Object.assign({}, state, {showLogin: showLogin})
         }
     }
-
     const store = Redux.createStore(reducer, /* preloadedState, */
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     );

@@ -50,7 +50,7 @@
         }
 
         .drop-down{
-            padding: 15px 15px 0px 15px;
+            padding: 15px 15px 2px 15px;
             position: absolute;
             top: -7px;
             right: 0px;
@@ -75,12 +75,14 @@
         }
 
     </style>
+
     <div on-tap="_openDropDown" on-mouseover="_openDropDown" on-mouseleave="_closeDropDown" class="container">
         <slot></slot>
         <template is="dom-if" if="{{caret}}">
             <iron-icon icon="arrow-drop-down"></iron-icon>
         </template>
     </div>
+
     <div class$="{{animate}} drop-down-container">
         <div class="drop-down" on-mouseleave="_closeDropDown" on-mouseover="_openDropDown">
             <template is="dom-repeat" items="{{optionsArray}}">
@@ -89,9 +91,9 @@
         </div>
     </div>
 
-  </template>
+    </template>
 
-  <script>
+    <script>
     class MyDropdown extends ReduxMixin(Polymer.Element) {
 
     connectedCallback() {
@@ -103,7 +105,6 @@
     static get is() { 
         return 'my-dropdown'; 
     }
-
 
     static get properties() {
         return {

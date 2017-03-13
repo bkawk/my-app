@@ -20,13 +20,11 @@
       <p>{{localize('name')}}  Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
       <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
     </div>
+    
   </template>
 
   <script>
-      class MyView1 extends ReduxMixin(Polymer.mixinBehaviors(
-        [Polymer.AppLocalizeBehavior],
-        Polymer.Element)) {
-      
+    class MyView1 extends ReduxMixin(Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element)) {
       connectedCallback() {
           super.connectedCallback();
           this.loadResources(this.resolveUrl("./my-locales.json"));
@@ -46,9 +44,7 @@
       _language(){
         this.language = this.setLanguage;
       }
-
     }
-
     window.customElements.define(MyView1.is, MyView1);
   </script>
 </dom-module>

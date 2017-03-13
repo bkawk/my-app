@@ -1,0 +1,162 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../my-redux.html">
+
+<dom-module id="my-login">
+<template>
+    <style include="shared-styles">
+    :host {
+        display: block;
+    }
+    .overlay{
+        will-change: transform, opacity;
+        background-color: var(--modal-overlay-color);
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        left: 0px;
+        bottom: 0px;
+        z-index: 999;
+        opacity: 0;
+        animation: fadein 0.3s;
+        transition-timing-function: ease-out;
+        animation-fill-mode: forwards;
+        @apply(--layout-horizontal);
+        @apply(--layout-center); 
+    }
+    .overlay-out{
+        animation: fadeout 0.3s;
+        transition-timing-function: ease-in;
+        animation-fill-mode: forwards;
+    }
+    .outer-container{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        left: 0px;
+        bottom: 0px;
+        z-index: 1000;
+        opacity: 1;
+        cursor: pointer;
+        @apply(--layout-horizontal);
+        @apply(--layout-center); 
+    }
+    .container{
+        padding: 20px 45px;
+        position: relative;
+        width: var(--modal-width);
+        height: auto;
+        background-color: var(--modal-bacground-color);
+        z-index: 1001;
+        opacity: 1;
+        animation: fadeup 0.4s;
+        transition-timing-function: ease-out;
+        animation-fill-mode: forwards;
+        margin: auto;
+        border-radius: var(--modal-border-radius);
+        cursor: default;
+        -webkit-box-shadow: -1px 6px 21px 0px rgba(0,0,0,0.15);
+        -moz-box-shadow: -1px 6px 21px 0px rgba(0,0,0,0.15);
+        box-shadow: -1px 6px 21px 0px rgba(0,0,0,0.15);
+    }
+    .container-out{
+        animation: fadedown 0.4s;
+        transition-timing-function: ease-in;
+        animation-fill-mode: forwards;
+    }
+    small{
+        @apply(--small-text);
+    }
+    @keyframes fadein {
+        from { opacity: 0; }
+        to  { opacity: 0.6; }
+    }
+    @keyframes fadeup {
+        from { 
+            opacity: 0;
+            transform: translate(0px, 30px);
+            }
+        to  { 
+            opacity: 1;
+            transform: translate(0px, 0px);
+            }
+    }
+    @keyframes fadeout {
+        from { opacity: 1; }
+        to  { opacity: 0; }
+    }
+    @keyframes fadedown {
+        from { 
+            opacity: 1;
+            transform: translate(0px, 0px);
+            }
+        to  { 
+            opacity: 0;
+            transform: translate(0px, 30px);
+            }
+    }
+    </style>
+
+    <div class="outer-container" on-tap="_close">
+        <div class="container" onclick="event.stopPropagation()" id="container">
+            <h2>{{localize('join')}}</h2>
+            <small>{{localize('intro')}}</small>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+</template>
+
+<script>
+    class MyLogin extends ReduxMixin(Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element)) {
+
+    connectedCallback() {
+        super.connectedCallback();
+        this.loadResources(this.resolveUrl("../my-locales.json"));
+    }
+
+    static get is() { 
+        return 'my-login'; 
+    }
+
+    static get actions() {
+        return Object.assign({
+            SHOW_LOGIN: function(showLogin){
+                return { type: 'SHOW_LOGIN', showLogin: showLogin}
+            }
+        });
+    }
+
+    static get properties() {
+        return {
+            language:{
+                type: String,
+                statePath: 'language',
+            },
+            mobile:{
+                type: Boolean,
+                statePath: 'mobile',
+            },
+            drawer: {
+                type: Boolean,
+                statePath: 'drawer',
+            },
+            loggedIn: {
+                type: Boolean,
+                statePath: 'loggedIn',
+            },
+        };
+    }
+        _close(){
+            this.toggleClass('container-out', true, this.$.container);
+            this.toggleClass('overlay-out', true, this.$.overlay);
+            setTimeout(function(){ 
+                this.toggleClass('container-out', false, this.$.container);
+                this.toggleClass('overlay-out', false, this.$.overlay);
+                this.dispatch('SHOW_LOGIN', false);
+            }.bind(this), 300);  
+        }
+    }
+    window.customElements.define(MyLogin.is, MyLogin);
+</script>
+</dom-module>
