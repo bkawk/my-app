@@ -43,11 +43,9 @@
         @keyframes fadeOut {
             0% {
                 opacity: 1;
-                transform: translate(0px, 0px);
             }
             100% {
                 opacity: 0;
-                transform: translate(0px, 20px);
             }
         }
 
@@ -56,7 +54,7 @@
             position: absolute;
             top: -7px;
             right: 0px;
-            background-color: white;
+            background-color: var(--toolbar-background-color);
             width: var(--drop-down-width, 110px);
             height: auto;
             border-radius: 4px;
@@ -71,9 +69,9 @@
         .item{
             width: 110px;
             height: 30px;
-            font-weight: 400;
-            line-height: 15px;
-            opacity: 0.8;
+            font-size: var(--toolbar-font-size, 13px);
+            font-weight: var(--toolbar-font-weight, 400);
+            line-height: 1.5;
         }
 
     </style>
@@ -86,7 +84,7 @@
     <div class$="{{animate}} drop-down-container">
         <div class="drop-down" on-mouseleave="_closeDropDown" on-mouseover="_openDropDown">
             <template is="dom-repeat" items="{{optionsArray}}">
-                <div class="item" on-click="_selecteder" id="{{item}}">{{item}}</div>
+                <div class="item" on-click="_selected" id="{{item}}">{{item}}</div>
             </template>
         </div>
     </div>
@@ -98,7 +96,8 @@
 
     connectedCallback() {
         super.connectedCallback();
-        this._menuoptions();
+        this._options();
+        this._columns();
     }
 
     static get is() { 
@@ -120,11 +119,11 @@
                 value: 1,
                 observer: '_columns'
             },
-            menuoptions: {
+            options: {
                 type: String,
-                observer: '_menuoptions'
+                observer: '_options'
             },
-            selecteder: {
+            selected: {
                 type: String,
                 notify: true
             },
@@ -140,8 +139,8 @@
                 '--button-width': this.width
             });
         }
-        _selecteder(e){
-            this.selecteder = e.target.id;
+        _selected(e){
+            this.selected = e.target.id;
             this.timer = setTimeout(function(){ 
                 this.animate = 'animateOut'
                 this.timer = setTimeout(function(){ 
@@ -151,10 +150,11 @@
                 }.bind(this), 200); 
             }.bind(this), 200); 
         }
-        _menuoptions(e){
-            this.optionsArray = this.menuoptions.split(',');
+        _options(e){
+            this.optionsArray = this.options.split(',');
         }
         _columns() {
+            console.log(this.columns);
             if(this.columns == 2){
                 this.updateStyles({
                     '--drop-down-width': '220px'

@@ -23,8 +23,6 @@
   <template>
     <style >
       :host {
-        --app-primary-color: white;
-        --app-secondary-color: #6b717d;
         display: block;
       }
 
@@ -55,11 +53,7 @@
       <!-- Main content -->
       <app-header-layout>
         <app-header slot="header" condenses fixed effects="waterfall" id="appHeader">
-            <my-header
-              mobile="{{mobile}}"
-              logged-in="{{loggedIn}}"
-              drawer="{{drawer}}">
-            </my-header>
+            <my-header></my-header>
         </app-header>
 
         <iron-pages
@@ -94,6 +88,9 @@
           },
           MOBILE: function(mobile){
               return { type: 'MOBILE', mobile: mobile}
+          },
+          DRAWER: function(drawer){
+                return { type: 'DRAWER', drawer: drawer}
           }
         }
 
@@ -113,11 +110,12 @@
           },
           loggedIn: {
             type: Boolean,
-            value: false,
+            statePath: 'loggedIn',
           },
-          setLanguage: {
-            type: String,
-            statePath: 'setLanguage',
+          drawer: {
+            type: Boolean,
+            statePath: 'drawer',
+            observer: '_drawer',
           }
 
         };
@@ -133,6 +131,9 @@
           super.connectedCallback();
           this.loadResources(this.resolveUrl("./my-locales.json"));
       }
+        _drawer(){
+            this.dispatch('DRAWER', this.drawer);
+        }
 
       _mobile(){
         this.dispatch('MOBILE', this.mobile);
@@ -147,22 +148,15 @@
         }
       }
       _routePageChanged(page) {
-        // Polymer 2.0 will call with `undefined` on initialization.
-        // Ignore until we are properly called with a string.
         if (page === undefined) {
           return;
         }
 
-        // If no page was found in the route data, page will be an empty string.
-        // Deault to 'view1' in that case.
         this.page = page || 'view1';
-
-        // Close a non-persistent drawer when the page & route are changed.
         this.drawer = false
       }
 
       _pageChanged(page) {
-        // Load page import on demand. Show 404 page if fails
         const resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
         Polymer.importHref(
             resolvedPageUrl,

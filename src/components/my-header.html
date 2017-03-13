@@ -8,8 +8,8 @@
     <style include="shared-styles">
     :host {
         display: block;
-        color: var(--app-secondary-color);
-        background-color: var(--app-primary-color);
+        color: var(--toolbar-font-color);
+        background-color: var(--toolbar-background-color);
     }
     .fixed-width {
         width: 100%;
@@ -27,15 +27,14 @@
     }
     .header-button, my-dropdown{
         color: var(--text-navigation-color);
-        font-size: 13px;
-        line-height: 52px;
-        height: 52px;
+        font-size: var(--toolbar-font-size);
+        line-height: var(--toolbar-height);
+        height: var(--toolbar-height);
+        font-weight: var(--toolbar-font-weight);
         padding: 0 10px;
-        font-weight: 400;
         text-decoration: none;
         display: block;
         cursor: pointer;
-        opacity: 0.8;
     }
     </style>
 
@@ -52,8 +51,8 @@
                 <a href="#" class="header-button" on-tap="_join">{{localize('join')}}</a>
                 <a href="#" class="header-button" on-tap="_logIn">{{localize('login')}}</a>
                 <my-dropdown 
-                    menuoptions="English,中文" 
-                    selecteder="{{language}}" 
+                    options="English,中文" 
+                    selected="{{language}}" 
                     columns="1" 
                     caret>{{localize('languages')}}
                 </my-dropdown>
@@ -79,21 +78,32 @@
         return Object.assign({
             LANGUAGE: function(language){
                 return { type: 'LANGUAGE', language: language}
+            },
+            DRAWER: function(drawer){
+                return { type: 'DRAWER', drawer: drawer}
             }
         });
     }
 
     static get properties() {
         return {
-            drawer: {
-                type: Boolean,
-                notify: true,
-            },
             language:{
                 type: String,
                 value: 'English',
                 observer: '_language'
-            }
+            },
+            mobile:{
+                type: Boolean,
+                statePath: 'mobile',
+            },
+            drawer: {
+                type: Boolean,
+                statePath: 'drawer',
+            },
+            loggedIn: {
+                type: Boolean,
+                statePath: 'loggedIn',
+            },
         };
     }
 
@@ -104,6 +114,7 @@
         }
         _toggleDrawer(){
             this.drawer = !this.drawer;
+            this.dispatch('DRAWER', this.drawer);
         }
     }
     window.customElements.define(MyHeader.is, MyHeader);

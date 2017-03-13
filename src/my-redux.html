@@ -4,13 +4,19 @@
     let initialState = {
         joinModal: false,
         loginModal: false,
-        setLanguage: 'English',
+        loggedIn: false,
+        drawer: false,
+        language: 'English',
     };
     let reducer = function(state, action){
         if(!state){ 
             return initialState
         };
         switch(action.type){
+            case 'DRAWER':
+                let drawer = state.drawer;
+                drawer  = action.drawer;
+                return Object.assign({}, state, {drawer: drawer})
             case 'MOBILE':
                 let mobile = state.mobile;
                 mobile  = action.mobile;
