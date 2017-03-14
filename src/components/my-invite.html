@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../shared-styles.html">
 <link rel="import" href="../my-redux.html">
 
@@ -64,6 +66,17 @@
         transition-timing-function: ease-in;
         animation-fill-mode: forwards;
     }
+    .save{
+        width: 100%;
+        margin-top: 30px;
+        margin-bottom: 25px;
+        position: relative;
+        left: -5px;
+    }
+    paper-button {
+        text-transform: none;
+        fint-size: 10px;
+    }
     small{
         @apply(--small-text);
     }
@@ -99,8 +112,12 @@
 
     <div class="outer-container" on-tap="_close">
         <div class="container" onclick="event.stopPropagation()" id="container">
-            <h2>{{localize('join')}}</h2>
-            <small>{{localize('intro')}}</small>
+            <h2>{{localize('invite')}}</h2>
+            <small>{{localize('invite-why')}}</small>
+            <paper-input label="Email"></paper-input>
+            <paper-input label="Website, Twitter or Blog"></paper-input>
+            <paper-input label=" Somthing about you"></paper-input>
+            <paper-button class="save">Request Invite</paper-button>
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
@@ -129,10 +146,6 @@
 
     static get properties() {
         return {
-            language:{
-                type: String,
-                statePath: 'language',
-            },
             mobile:{
                 type: Boolean,
                 statePath: 'mobile',
@@ -145,8 +158,17 @@
                 type: Boolean,
                 statePath: 'loggedIn',
             },
+            setLanguage: {
+                type: String,
+                statePath: 'language',
+                observer: '_language'
+            }
         };
     }
+
+        _language(){
+            this.language = this.setLanguage;
+        }
         _close(){
             this.toggleClass('container-out', true, this.$.container);
             this.toggleClass('overlay-out', true, this.$.overlay);

@@ -1,6 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 
-<!-- shared styles for all views -->
 <dom-module id="shared-styles">
   <template>
     <style>
@@ -11,13 +10,45 @@
         --toolbar-font-weight: 300;
         --toolbar-background-color: white;
         --toolbar-font-color: #6b717d;
+        --form-font-color: #afb0b2;
         --modal-overlay-color: black;
         --modal-bacground-color: white;
-        --modal-border-radius: 2px;
-        --modal-width: 400px;
-        --small-text :{};
+        --modal-border-radius: 3px;
+        --modal-width: 320px;
+        --small-text :{
+            border-bottom: 25px;
+            font-weight: 200;
+            font-size: 15px;
+            line-height: 1.2;
+        };
+        --paper-button:{
+          position: relative;
+          left: -5px;
+          margin-top: 10px;
+          width: 100%;
+          text-transform: none;
+          font-size: 14px;
+          font-weight: 600;
+          color: #6b717d;
+          border: 1px solid var(--form-font-color);
+          background: #ffffff; 
+          background: -moz-linear-gradient(top, #ffffff 0%, #f6f7f8 100%); 
+          background: -webkit-linear-gradient(top, #ffffff 0%,#f6f7f8 100%); 
+          background: linear-gradient(to bottom, #ffffff 0%,#f6f7f8 100%); 
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f7f8',GradientType=0 ); 
+        }
+        --paper-input-container-label: {
+          font-size: 14px;
+        }
+        --paper-input-container-input: {
+          font-size: 14px;
+        };
+        --paper-input-container-color: var(--form-font-color);
+        --paper-input-container-focus-color: var(--form-font-color);
+        --paper-input-container-invalid-color: var(--form-font-color);
+        --paper-input-container-input-color:var(--form-font-color);
 
-      }
+      } /* End Host */
 
     </style>
   </template>

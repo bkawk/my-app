@@ -1,6 +1,8 @@
 {
     "English": {
         "name": "TheApp",
+        "invite": "Request an Invitation",
+        "invite-why": "TheApp is just getting started, request an invitation and we'll send you one as soon as possible.",
         "login": "Log In",
         "login-why": "Welcome back!",
         "login-because": "you will have a great time",
@@ -32,6 +34,8 @@
         
     "中文": {
         "name": "该应",
+        "invite": "序允许您快",
+        "invite-why": "登录 is just getting started, request an invitation and we'll send you one as soon as possible",
         "login": "登录",
         "login-why": "登录",
         "login-because": "登录登录",

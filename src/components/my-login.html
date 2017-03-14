@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../shared-styles.html">
 <link rel="import" href="../my-redux.html">
 
@@ -64,6 +66,29 @@
         transition-timing-function: ease-in;
         animation-fill-mode: forwards;
     }
+    .save{
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+    .provider{
+        margin-bottom: 5px;
+        color: white;
+        border: 1px solid #334d7a;
+        background: #5375b1; 
+        background: -moz-linear-gradient(top, #5375b1 0%, #446295 100%); 
+        background: -webkit-linear-gradient(top, #5375b1 0%,#446295 100%); 
+        background: linear-gradient(to bottom, #5375b1 0%,#446295 100%); 
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5375b1', endColorstr='#446295',GradientType=0 ); 
+    }
+    .twitter{
+        border: 1px soid #3b88c3;
+        background: #55acee; 
+        background: -moz-linear-gradient(top,  #55acee 0%, #51a3e2 100%); 
+        background: -webkit-linear-gradient(top,  #55acee 0%,#51a3e2 100%); 
+        background: linear-gradient(to bottom,  #55acee 0%,#51a3e2 100%); 
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#55acee', endColorstr='#51a3e2',GradientType=0 ); 
+    }
+
     small{
         @apply(--small-text);
     }
@@ -99,8 +124,12 @@
 
     <div class="outer-container" on-tap="_close">
         <div class="container" onclick="event.stopPropagation()" id="container">
-            <h2>{{localize('join')}}</h2>
-            <small>{{localize('intro')}}</small>
+            <h2>{{localize('login')}}</h2>
+            <paper-button class="provider">Log in with Facebook</paper-button>
+            <paper-button class="provider twitter">Log in with Twitter</paper-button>
+            <paper-input label="Email"></paper-input>
+            <paper-input label="Password"></paper-input>
+            <paper-button class="save">Log In</paper-button>
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
@@ -129,10 +158,6 @@
 
     static get properties() {
         return {
-            language:{
-                type: String,
-                statePath: 'language',
-            },
             mobile:{
                 type: Boolean,
                 statePath: 'mobile',
@@ -145,8 +170,16 @@
                 type: Boolean,
                 statePath: 'loggedIn',
             },
+            setLanguage: {
+                type: String,
+                statePath: 'language',
+                observer: '_language'
+            }
         };
     }
+        _language(){
+            this.language = this.setLanguage;
+        }
         _close(){
             this.toggleClass('container-out', true, this.$.container);
             this.toggleClass('overlay-out', true, this.$.overlay);
