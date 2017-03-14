@@ -72,22 +72,12 @@
     }
     .provider{
         margin-bottom: 5px;
-        color: white;
-        border: 1px solid #334d7a;
-        background: #5375b1; 
-        background: -moz-linear-gradient(top, #5375b1 0%, #446295 100%); 
-        background: -webkit-linear-gradient(top, #5375b1 0%,#446295 100%); 
-        background: linear-gradient(to bottom, #5375b1 0%,#446295 100%); 
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5375b1', endColorstr='#446295',GradientType=0 ); 
+        @apply(--facebook-button)
     }
     .twitter{
-        border: 1px soid #3b88c3;
-        background: #55acee; 
-        background: -moz-linear-gradient(top,  #55acee 0%, #51a3e2 100%); 
-        background: -webkit-linear-gradient(top,  #55acee 0%,#51a3e2 100%); 
-        background: linear-gradient(to bottom,  #55acee 0%,#51a3e2 100%); 
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#55acee', endColorstr='#51a3e2',GradientType=0 ); 
+        @apply(--twitter-button)
     }
+
 
     small{
         @apply(--small-text);
@@ -125,11 +115,11 @@
     <div class="outer-container" on-tap="_close">
         <div class="container" onclick="event.stopPropagation()" id="container">
             <h2>{{localize('login')}}</h2>
-            <paper-button class="provider">Log in with Facebook</paper-button>
-            <paper-button class="provider twitter">Log in with Twitter</paper-button>
-            <paper-input label="Email"></paper-input>
-            <paper-input label="Password"></paper-input>
-            <paper-button class="save">Log In</paper-button>
+            <paper-button class="provider">{{localize('login-with-facebook')}}</paper-button>
+            <paper-button class="provider twitter">{{localize('login-with-twitter')}}</paper-button>
+            <paper-input label="{{localize('email')}}"></paper-input>
+            <paper-input label="{{localize('password')}}"></paper-input>
+            <paper-button class="save">{{localize('login')}}</paper-button>
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
