@@ -1,5 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth-script.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
@@ -35,9 +38,10 @@
         api-key="AIzaSyAhoCXxkY-ffNwA_7L7HIwBVpASYj1btNE" 
         auth-domain="convoo-login-demo.firebaseapp.com" 
         database-url="https://convoo-login-demo.firebaseio.com"
-        storage-bucket="the-app-4e238.appspot.com",
+        storage-bucket="the-app-4e238.appspot.com"
         messaging-sender-id="916383740318">
     </firebase-app>
+    <firebase-auth app-name="bkawkfirebase" id="authid" user="{{user}}" provider="{{provider}}" on-error="handleError"></firebase-auth>
 
     <iron-media-query query="max-width: 415px" query-matches="{{mobile}}"></iron-media-query>  
 
@@ -120,6 +124,12 @@
           showLogin: {
             type: Boolean,
             statePath: 'showLogin',
+          },
+          provider: {
+            type: String,
+            value: 'google',
+            statePath: 'provider',
+            observer: '_provider',
           }
         };
       }
@@ -131,6 +141,16 @@
       connectedCallback(){
           super.connectedCallback();
           this.loadResources(this.resolveUrl("./my-locales.json"));
+      }
+      _provider(){
+        if(this.provider == 'facebook' || this.provider == 'twitter'){
+          this.$.authid.signInWithPopup().then(function(response) {
+            console.log(response)
+          })
+          .catch(function(error) {
+            console.log(error)
+          });
+        }
       }
       _drawer(){
             this.dispatch('DRAWER', this.drawer);

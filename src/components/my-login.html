@@ -115,8 +115,8 @@
     <div class="outer-container" on-tap="_close">
         <div class="container" onclick="event.stopPropagation()" id="container">
             <h2>{{localize('login')}}</h2>
-            <paper-button class="provider">{{localize('login-with-facebook')}}</paper-button>
-            <paper-button class="provider twitter">{{localize('login-with-twitter')}}</paper-button>
+            <paper-button on-tap="_facebook" class="provider">{{localize('login-with-facebook')}}</paper-button>
+            <paper-button on-tap="_twitter" class="provider twitter">{{localize('login-with-twitter')}}</paper-button>
             <paper-input label="{{localize('email')}}"></paper-input>
             <paper-input label="{{localize('password')}}"></paper-input>
             <paper-button class="save">{{localize('login')}}</paper-button>
@@ -142,6 +142,9 @@
         return Object.assign({
             SHOW_LOGIN: function(showLogin){
                 return { type: 'SHOW_LOGIN', showLogin: showLogin}
+            },
+            PROVIDER: function(provider){
+                return { type: 'PROVIDER', provider: provider}
             }
         });
     }
@@ -167,6 +170,14 @@
             }
         };
     }
+        _facebook(event){
+            event.stopPropagation()
+            this.dispatch('PROVIDER', 'facebook');
+        }
+        _twitter(event){
+            event.stopPropagation()
+            this.dispatch('PROVIDER', 'twitter');
+        }
         _language(){
             this.language = this.setLanguage;
         }

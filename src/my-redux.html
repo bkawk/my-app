@@ -14,6 +14,10 @@
             return initialState
         };
         switch(action.type){
+            case 'PROVIDER':
+                let provider = state.provider;
+                provider  = action.provider;
+                return Object.assign({}, state, {provider: provider})
             case 'DRAWER':
                 let drawer = state.drawer;
                 drawer  = action.drawer;
