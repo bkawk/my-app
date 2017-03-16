@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../shared-styles.html">
 <link rel="import" href="../my-redux.html">
@@ -117,15 +118,15 @@
             <template is="dom-if" if="{{!thankyou}}">
                 <h2>{{localize('invite')}}</h2>
                 <small>{{localize('invite-why')}}</small>
-                <paper-input label="{{localize('email')}}" value="{{email}}"></paper-input>
-                <paper-input label="{{localize('website-twitter-blog')}}" value="{{social}}"></paper-input>
-                <paper-input label="{{localize('somthing-about-you')}}" value="{{about}}"></paper-input>
+                <paper-input label="{{localize('email')}}" value="{{email}}" required></paper-input>
+                <paper-input label="{{localize('website-twitter-blog')}}" value="{{social}}" required></paper-input>
+                <paper-textarea label="{{localize('somthing-about-you')}}" value="{{about}}" required></paper-textarea>
                 <paper-button on-tap="_requestInvite" class="save">{{localize('request-invite')}}</paper-button>
             </template>
             <template is="dom-if" if="{{thankyou}}">
                 <h2>{{localize('thank-you')}}</h2>
                 <small>{{localize('what-next')}}</small>
-                 <paper-button class="save">{{localize('close')}}</paper-button>
+                 <paper-button class="save" onclick="validate()">{{localize('close')}}</paper-button>
             </template>
         </div>
     </div>

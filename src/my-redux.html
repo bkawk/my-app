@@ -2,17 +2,9 @@
 
 <script>
         var getShowInviteLink = window.localStorage.getItem("showInviteLink");
-          if(getShowInviteLink){ 
-             showInviteLink = false
-          } else {
-              showInviteLink = true
-          }
-          var getLanguage = window.localStorage.getItem("language");
-          if(getLanguage){
-              language = getLanguage
-          } else {
-              language = 'English'
-          }
+        if(getShowInviteLink){ showInviteLink = false } else { showInviteLink = true }
+        var getLanguage = window.localStorage.getItem("language");
+        if(getLanguage){ language = getLanguage } else { language = 'English' };
 
     let initialState = {
         showInviteLink: showInviteLink,
