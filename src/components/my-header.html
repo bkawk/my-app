@@ -50,14 +50,16 @@
         
             <template is="dom-if" if="{{!mobile}}">
                 <template is="dom-if" if="{{!loggedIn}}">
-                    <a href="#" class="header-button" on-tap="_invite">{{localize('join')}}</a>
-                    <a href="#" class="header-button" on-tap="_logIn">{{localize('login')}}</a>
-                    <my-dropdown 
-                        options="English,中文" 
-                        selected="{{language}}" 
-                        columns="1" 
-                        caret>{{localize('languages')}}
-                    </my-dropdown>
+                    <template is="dom-if" if="{{showInviteLink}}">
+                        <a href="#" class="header-button" on-tap="_invite">{{localize('join')}}</a>
+                    </template>
+                        <a href="#" class="header-button" on-tap="_logIn">{{localize('login')}}</a>
+                        <my-dropdown 
+                            options="English,中文" 
+                            selected="{{language}}" 
+                            columns="1" 
+                            caret>{{localize('languages')}}
+                        </my-dropdown>
                 </template>
             </template>
 
@@ -97,10 +99,14 @@
 
     static get properties() {
         return {
-            language:{
+            language: {
                 type: String,
-                value: 'English',
                 observer: '_language'
+            },
+            defaultLanguage: {
+                type: String,
+                statePath: 'language',
+                observer: '_defaultLanguage'
             },
             mobile:{
                 type: Boolean,
@@ -114,8 +120,15 @@
                 type: Boolean,
                 statePath: 'loggedIn',
             },
+            showInviteLink: {
+                type: Boolean,
+                statePath: 'showInviteLink',
+            }
         };
     }
+        _defaultLanguage(){
+            this.language = this.defaultLanguage
+        }
         _logIn(){
             this.dispatch('SHOW_LOGIN', true);
         }
@@ -124,6 +137,7 @@
         }
         _language(){
             if(this.language){
+                window.localStorage.setItem("language", this.language);
                 this.dispatch('LANGUAGE', this.language);
             }
         }

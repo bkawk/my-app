@@ -136,10 +136,6 @@
 <script>
     class MyInvite extends ReduxMixin(Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element)) {
 
-    connectedCallback() {
-        super.connectedCallback();
-        this.loadResources(this.resolveUrl("../my-locales.json"));
-    }
 
     static get is() { 
         return 'my-invite'; 
@@ -149,8 +145,16 @@
         return Object.assign({
             SHOW_INVITE: function(showInvite){
                 return { type: 'SHOW_INVITE', showInvite: showInvite}
+            },
+            SHOW_INVITE_LINK: function(showInviteLink){
+                return { type: 'SHOW_INVITE_LINK', showInviteLink: showInviteLink}
             }
         });
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        this.loadResources(this.resolveUrl("../my-locales.json"));
     }
 
     static get properties() {
@@ -185,6 +189,8 @@
             this.$.mydoc.data =  {"email": this.email, "social": this.social, "about": this.about};
             this.$.mydoc.save('invites');
             this.thankyou = true;
+            this.dispatch('SHOW_INVITE_LINK', false);
+            window.localStorage.setItem("showInviteLink", false);
         }
         _language(){
             this.language = this.setLanguage;

@@ -1,12 +1,26 @@
 <link rel="import" href="../bower_components/polymer-redux/polymer-redux.html">
 
 <script>
+        var getShowInviteLink = window.localStorage.getItem("showInviteLink");
+          if(getShowInviteLink){ 
+             showInviteLink = false
+          } else {
+              showInviteLink = true
+          }
+          var getLanguage = window.localStorage.getItem("language");
+          if(getLanguage){
+              language = getLanguage
+          } else {
+              language = 'English'
+          }
+
     let initialState = {
+        showInviteLink: showInviteLink,
         showInvite: false,
         showLogin: false,
         loggedIn: false,
         drawer: false,
-        language: 'English',
+        language: language
     };
 
     let reducer = function(state, action){
@@ -34,6 +48,10 @@
                 let language = state.language;
                 language  = action.language;
                 return Object.assign({}, state, {language: language})
+            case 'SHOW_INVITE_LINK':
+                let showInviteLink = state.showInviteLink;
+                showInviteLink  = action.showInviteLink;
+                return Object.assign({}, state, {showInviteLink: showInviteLink})
             case 'SHOW_INVITE':
                 let showInvite = state.showInvite;
                 showInvite  = action.showInvite;
