@@ -110,14 +110,23 @@
     }
     </style>
 
+    <firebase-document id="mydoc" app-name="bkawkfirebase"></firebase-document>
+
     <div class="outer-container" on-tap="_close">
-        <div class="container" onclick="event.stopPropagation()" id="container">
-            <h2>{{localize('invite')}}</h2>
-            <small>{{localize('invite-why')}}</small>
-            <paper-input label="{{localize('email')}}"></paper-input>
-            <paper-input label="{{localize('website-twitter-blog')}}"></paper-input>
-            <paper-input label="{{localize('somthing-about-you')}}"></paper-input>
-            <paper-button class="save">{{localize('request-invite')}}</paper-button>
+        <div class="container" onclick="event.stopPropagation()" id="container">    
+            <template is="dom-if" if="{{!thankyou}}">
+                <h2>{{localize('invite')}}</h2>
+                <small>{{localize('invite-why')}}</small>
+                <paper-input label="{{localize('email')}}" value="{{email}}"></paper-input>
+                <paper-input label="{{localize('website-twitter-blog')}}" value="{{social}}"></paper-input>
+                <paper-input label="{{localize('somthing-about-you')}}" value="{{about}}"></paper-input>
+                <paper-button on-tap="_requestInvite" class="save">{{localize('request-invite')}}</paper-button>
+            </template>
+            <template is="dom-if" if="{{thankyou}}">
+                <h2>{{localize('thank-you')}}</h2>
+                <small>{{localize('what-next')}}</small>
+                 <paper-button class="save">{{localize('close')}}</paper-button>
+            </template>
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
@@ -162,10 +171,21 @@
                 type: String,
                 statePath: 'language',
                 observer: '_language'
+            },
+            thankyou: {
+                type: Boolean,
+                value: false,
             }
         };
     }
 
+        _requestInvite(e){
+            e.stopPropagation();
+            this.$.mydoc.path = null
+            this.$.mydoc.data =  {"email": this.email, "social": this.social, "about": this.about};
+            this.$.mydoc.save('invites');
+            this.thankyou = true;
+        }
         _language(){
             this.language = this.setLanguage;
         }

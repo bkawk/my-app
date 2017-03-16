@@ -112,14 +112,15 @@
     }
     </style>
 
+    <firebase-auth app-name="bkawkfirebase" id="authid" user="{{user}}" provider="{{provider}}" on-error="_loginError"></firebase-auth>
     <div class="outer-container" on-tap="_close">
         <div class="container" onclick="event.stopPropagation()" id="container">
             <h2>{{localize('login')}}</h2>
-            <paper-button on-tap="_facebook" class="provider">{{localize('login-with-facebook')}}</paper-button>
-            <paper-button on-tap="_twitter" class="provider twitter">{{localize('login-with-twitter')}}</paper-button>
-            <paper-input label="{{localize('email')}}"></paper-input>
-            <paper-input label="{{localize('password')}}"></paper-input>
-            <paper-button class="save">{{localize('login')}}</paper-button>
+            <paper-button on-tap="_facebookLogin" class="provider">{{localize('login-with-facebook')}}</paper-button>
+            <paper-button on-tap="_twitterLogin" class="provider twitter">{{localize('login-with-twitter')}}</paper-button>
+            <paper-input label="{{localize('email')}}" value="{{email}}"></paper-input>
+            <paper-input label="{{localize('password')}}" value="{{password}}"></paper-input>
+            <paper-button on-tap="_emailLogin" class="save">{{localize('login')}}</paper-button>
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
@@ -142,9 +143,6 @@
         return Object.assign({
             SHOW_LOGIN: function(showLogin){
                 return { type: 'SHOW_LOGIN', showLogin: showLogin}
-            },
-            PROVIDER: function(provider){
-                return { type: 'PROVIDER', provider: provider}
             }
         });
     }
@@ -170,13 +168,37 @@
             }
         };
     }
-        _facebook(event){
-            event.stopPropagation()
-            this.dispatch('PROVIDER', 'facebook');
+        _loginError(e){}
+        _facebookLogin(e){
+            e.stopPropagation()
+            this.provider = 'facebook' 
+            this.$.authid.signInWithPopup().then(function(response) {
+                console.log(response);
+            }).catch(function(error) {
+                console.log(error.code);
+            });
+
         }
-        _twitter(event){
-            event.stopPropagation()
-            this.dispatch('PROVIDER', 'twitter');
+        _twitterLogin(e){
+            e.stopPropagation()
+            this.provider = 'twitter'
+            this.$.authid.signInWithPopup().then(function(response) {
+                console.log(response);
+            }).catch(function(error) {
+                console.log(error.code);
+            });
+        }
+        _emailLogin(e){
+            e.stopPropagation()
+            if (this.email && this.password) {
+                this.$.authid.signInWithEmailAndPassword(this.email, this.password).then(function(response) {
+                    console.log(response);
+                }).catch(function(error) {
+                    console.log(error.code);
+                });
+                this.email = null;
+                this.password = null;
+            }
         }
         _language(){
             this.language = this.setLanguage;

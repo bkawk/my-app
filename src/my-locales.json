@@ -15,7 +15,10 @@
         "somthing-about-you": "Somthing about you",
         "password": "Password",
         "login-with-facebook": "Login with Facebook",
-        "login-with-twitter": "Login with Twitter"
+        "login-with-twitter": "Login with Twitter",
+        "thank-you": "Thank You",
+        "what-next": "for requesting an invitation and we'll send you one via email as soon as possible.",
+        "close": "Close"
         },
         
     "中文": {
@@ -34,6 +37,9 @@
         "somthing-about-you": "序允许您快",
         "password": "注册",
         "login-with-facebook": "登录登录",
-        "login-with-twitter": "登录注册"
+        "login-with-twitter": "登录注册",
+        "thank-you": "录注",
+        "what-next": "应用程序允许您快速构",
+        "close": "注册"
         }
 }
