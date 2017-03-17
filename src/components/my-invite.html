@@ -74,13 +74,9 @@
         position: relative;
         left: -5px;
     }
-    paper-button {
-        text-transform: none;
-        fint-size: 10px;
-    }
-    small{
-        @apply(--small-text);
-    }
+
+  
+
     @keyframes fadein {
         from { opacity: 0; }
         to  { opacity: 0.6; }
@@ -118,9 +114,33 @@
             <template is="dom-if" if="{{!thankyou}}">
                 <h2>{{localize('invite')}}</h2>
                 <small>{{localize('invite-why')}}</small>
-                <paper-input label="{{localize('email')}}" value="{{email}}" required></paper-input>
-                <paper-input label="{{localize('website-twitter-blog')}}" value="{{social}}" required></paper-input>
-                <paper-textarea label="{{localize('somthing-about-you')}}" value="{{about}}" required></paper-textarea>
+                <paper-input 
+                    label="{{localize('email')}}" 
+                    value="{{email}}" 
+                    required 
+                    no-label-float
+                    id="email"
+                    error-message="please enter a valid email address"
+                    required
+                    on-keydown="_submitOnEnter"></paper-input>
+                <paper-input 
+                    label="{{localize('website-twitter-blog')}}" 
+                    value="{{social}}" 
+                    required 
+                    no-label-float
+                    id="social"
+                    error-message="Please enter somthing"
+                    required
+                    on-keydown="_submitOnEnter"></paper-input>
+                <paper-textarea 
+                    label="{{localize('somthing-about-you')}}" 
+                    value="{{about}}" 
+                    required 
+                    no-label-float
+                    id="about"
+                    error-message="Please enter somthing"
+                    required
+                    on-keydown="_submitOnEnter"></paper-textarea>
                 <paper-button on-tap="_requestInvite" class="save">{{localize('request-invite')}}</paper-button>
             </template>
             <template is="dom-if" if="{{thankyou}}">

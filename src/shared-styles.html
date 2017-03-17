@@ -13,14 +13,11 @@
         --form-font-color: #afb0b2;
         --modal-overlay-color: black;
         --modal-bacground-color: white;
+        --heading-font-color: #4c505a;
+        --paragraph-font-color: #383d48;
         --modal-border-radius: 3px;
         --modal-width: 320px;
-        --small-text :{
-            border-bottom: 25px;
-            font-weight: 200;
-            font-size: 15px;
-            line-height: 1.2;
-        };
+
         --paper-button:{
           position: relative;
           left: -5px;
@@ -41,12 +38,19 @@
           font-size: 14px;
         }
         --paper-input-container-input: {
-          font-size: 18px;
+          font-size: 16px;
         };
+        
         --paper-input-container-color: var(--form-font-color);
         --paper-input-container-focus-color: var(--form-font-color);
         --paper-input-container-invalid-color: var(--form-font-color);
         --paper-input-container-input-color:var(--form-font-color);
+        --paper-input-container-underline: {
+          opacity: 0.4;
+        }
+        --paper-input-container-underline-focus: {
+          opacity: 0.4;
+        }
 
         --twitter-button:{
           color: white;
@@ -56,7 +60,9 @@
           background: -webkit-linear-gradient(top,  #55acee 0%,#51a3e2 100%); 
           background: linear-gradient(to bottom,  #55acee 0%,#51a3e2 100%); 
           filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#55acee', endColorstr='#51a3e2',GradientType=0 );   
-          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+          -webkit-box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.6);
+          -moz-box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.6);
+          box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.6);
         }
         --facebook-button:{
           color: white;
@@ -66,10 +72,39 @@
           background: -webkit-linear-gradient(top, #5375b1 0%,#446295 100%); 
           background: linear-gradient(to bottom, #5375b1 0%,#446295 100%); 
           filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5375b1', endColorstr='#446295',GradientType=0 ); 
-          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+          -webkit-box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.6);
+          -moz-box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.6);
+          box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.6);
         }
+     
 
       } /* End Host */
+          h1, h2{
+        font-weight: 400;
+        color: var(--heading-font-color)
+    }
+
+    p{
+      font-family: Georgia,Times,Times New Roman,serif; 
+      line-height: 1.5;
+      letter-spacing: 0.4px;
+      font-weight: 10;
+      font-size:15px;
+      color: var(--paragraph-font-color)
+      
+    }
+        paper-button {
+        text-transform: none;
+        fint-size: 10px;
+    }
+      small{
+            border-bottom: 25px;
+            font-weight: 200;
+            font-size: 15px;
+            line-height: 1.5;
+            padding-bottom: 15px;
+            display: block;
+    }
 
     </style>
   </template>
