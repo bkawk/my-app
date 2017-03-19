@@ -18,7 +18,9 @@
         "login-with-twitter": "Login with Twitter",
         "thank-you": "Thank You",
         "what-next": "we got your request for an invitation and we'll get one out to you via email as soon as possible.",
-        "close": "Close"
+        "close": "Close",
+        "almost-done": "Almost done...",
+        "save": "Save"
         },
         
     "中文": {
@@ -40,6 +42,8 @@
         "login-with-twitter": "登录注册",
         "thank-you": "录注",
         "what-next": "应用程序允许您快速构",
-        "close": "注册"
+        "close": "注册",
+        "almost-done": "应用程序..",
+        "save": "许您快"
         }
 }

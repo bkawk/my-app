@@ -12,7 +12,8 @@
         showLogin: false,
         loggedIn: false,
         drawer: false,
-        language: language
+        language: language,
+        page: 'view1'
     };
 
     let reducer = function(state, action){
@@ -28,18 +29,26 @@
                 let drawer = state.drawer;
                 drawer  = action.drawer;
                 return Object.assign({}, state, {drawer: drawer})
-            case 'MOBILE':
-                let mobile = state.mobile;
-                mobile  = action.mobile;
-                return Object.assign({}, state, {mobile: mobile})
             case 'USER':
                 let user = state.user;
                 user  = action.user;
                 return Object.assign({}, state, {user: user})
+            case 'MOBILE':
+                let mobile = state.mobile;
+                mobile  = action.mobile;
+                return Object.assign({}, state, {mobile: mobile})
+            case 'LOGGED_IN':
+                let loggedIn = state.loggedIn;
+                loggedIn = action.loggedIn;
+                return Object.assign({}, state, {loggedIn: loggedIn})
             case 'LANGUAGE':
                 let language = state.language;
                 language  = action.language;
                 return Object.assign({}, state, {language: language})
+            case 'PAGE':
+                let page = state.page;
+                page  = action.page;
+                return Object.assign({}, state, {page: page})
             case 'SHOW_INVITE_LINK':
                 let showInviteLink = state.showInviteLink;
                 showInviteLink  = action.showInviteLink;

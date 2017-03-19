@@ -25,7 +25,8 @@
     "polymer-redux": "polymer-2",
     "polymerfire": "firebase/polymerfire#2.0-preview",
     "paper-input": "2.0-preview",
-    "paper-button": "2.0-preview"
+    "paper-button": "2.0-preview",
+    "iron-image": "2.0-preview"
   },
   "devDependencies": {
     "web-component-tester": "6.0.0-prerelease.5"

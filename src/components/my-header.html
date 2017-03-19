@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../shared-styles.html">
 <link rel="import" href="my-dropdown.html">
 <link rel="import" href="../my-redux.html">
@@ -36,8 +37,15 @@
         display: block;
         cursor: pointer;
     }
+    .avatar{
+        background-color: white;
+        height: 35px;
+        width: 35px;
+        border-radius: 50%;
+        margin-top: 7px;
+    }
     </style>
-
+    <firebase-auth app-name="bkawkfirebase" id="auth"></firebase-auth>
     <app-toolbar class="toolbar">
         <div class="fixed-width">
             <template is="dom-if" if="{{mobile}}">
@@ -45,7 +53,12 @@
             </template>
             <a href="/" class="logo"><img src="../../images/logo.svg" ></a>
             <template is="dom-if" if="{{loggedIn}}">
-                logged in
+                <my-dropdown 
+                    options="Settings,Logout" 
+                    selected="{{userMenu}}" 
+                    columns="1">
+                    <iron-image src="{{user.photoURL}}" class="avatar" sizing="cover" preload fade></iron-image>
+                </my-dropdown>
             </template>
         
             <template is="dom-if" if="{{!mobile}}">
@@ -93,7 +106,17 @@
             },
             SHOW_LOGIN: function(showLogin){
                 return { type: 'SHOW_LOGIN', showLogin: showLogin}
+            },
+            LOGGED_IN: function(loggedIn){
+                return { type: 'LOGGED_IN', loggedIn: loggedIn}
+            },
+            USER: function(user){
+                return { type: 'USER', user: user}
+            },
+            PAGE: function(page){
+                return { type: 'PAGE', page: page}
             }
+                       
         });
     }
 
@@ -123,9 +146,29 @@
             showInviteLink: {
                 type: Boolean,
                 statePath: 'showInviteLink',
+            },
+            user: {
+                type: Object,
+                statePath: 'user',   
+            },
+            userMenu: {
+                type: String,
+                observer: '_userMenu'
             }
         };
     }
+        _userMenu(){
+            if(this.userMenu == 'Logout'){
+                console.log("Logout from my-header")
+                this.$$('#auth').signOut();
+                this.dispatch('LOGGED_IN', false);
+                this.dispatch('USER', null);
+            }
+            if(this.userMenu == 'Settings'){
+                console.log("settings");
+                 this.dispatch('PAGE', 'view2');
+            }
+        }
         _defaultLanguage(){
             this.language = this.defaultLanguage
         }

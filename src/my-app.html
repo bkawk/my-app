@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
@@ -20,7 +21,6 @@
 <link rel="import" href="components/my-login.html">
 <link rel="import" href="my-redux.html">
 
-
 <dom-module id="my-app">
   <template>
     <style >
@@ -30,6 +30,7 @@
 
     </style>
 
+    <firebase-auth app-name="bkawkfirebase" id="auth" user="{{user}}" online="{{online}}" status-known="{{statusKnown}}" signed-in="{{signedIn}}"></firebase-auth>
     <firebase-app 
         name="bkawkfirebase" 
         api-key="AIzaSyAhoCXxkY-ffNwA_7L7HIwBVpASYj1btNE" 
@@ -43,7 +44,6 @@
 
     <template is="dom-if" if="{{showInvite}}"><my-invite></my-invite></template>
     <template is="dom-if" if="{{showLogin}}"><my-login></my-login></template>
-
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -62,7 +62,6 @@
         <app-header slot="header" condenses fixed effects="waterfall" id="appHeader">
             <my-header></my-header>
         </app-header>
-
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
           <my-view1 name="view1"></my-view1>
           <my-view2 name="view2"></my-view2>
@@ -85,42 +84,81 @@
           USER: function(user){
               return { type: 'USER', user: user}
           },
+          LOGGED_IN: function(loggedIn){
+              return { type: 'LOGGED_IN', loggedIn: loggedIn}
+          },
           MOBILE: function(mobile){
               return { type: 'MOBILE', mobile: mobile}
           },
           DRAWER: function(drawer){
                 return { type: 'DRAWER', drawer: drawer}
+          },
+          PAGE: function(page){
+                return { type: 'PAGE', page: page}
           }
       });
     }
-      static get properties() {
-        return {
-          page: {
-            type: String,
-            reflectToAttribute: true,
-            observer: '_pageChanged',
-          },
-          mobile: {
-            type: Boolean,
-            observer: '_mobile',
-          },
-          loggedIn: {
-            type: Boolean,
-            statePath: 'loggedIn',
-          },
-          drawer: {
-            type: Boolean,
-            statePath: 'drawer',
-            observer: '_drawer',
-          },
-          showInvite: {
-            type: Boolean,
-            statePath: 'showInvite',
-          },
-          showLogin: {
-            type: Boolean,
-            statePath: 'showLogin',
-          }
+    static get properties() {
+      return {
+      /**
+      * page represents the curent page 
+      *
+      * @type {String}
+      */
+      page: {
+        type: String,
+        reflectToAttribute: true,
+        statePath: 'page',
+        value: 'view1',
+        observer: '_pageChanged',
+      },
+      /**
+      * mobile is true if the page width is less than 450
+      *
+      * @type {Boolean}
+      */
+      mobile: {
+        type: Boolean,
+        observer: '_mobile',
+      },
+      /**
+      * if drawer is true the drawer is opened 
+      *
+      * @type {Boolean}
+      */
+      drawer: {
+        type: Boolean,
+        statePath: 'drawer',
+        observer: '_drawer',
+      },
+      /**
+      * if showInvite is true open the invite modal
+      *
+      * @type {Boolean}
+      */
+      showInvite: {
+        type: Boolean,
+        statePath: 'showInvite',
+      },
+      /**
+      * if showLogin is true open the login modal
+      *
+      * @type {Boolean}
+      */
+      showLogin: {
+        type: Boolean,
+        statePath: 'showLogin',
+      },
+      /**
+      * if the status is known, set the users login
+      *
+      * @type {Boolean}
+      */
+      statusKnown: {
+        type: Boolean,
+        observer: '_statusKnown'
+      }
+
         };
       }
       static get observers() {
@@ -129,12 +167,31 @@
         ];
       }
       connectedCallback(){
-          super.connectedCallback();
-          this.loadResources(this.resolveUrl("./my-locales.json"));
+        super.connectedCallback();
+        this.loadResources(this.resolveUrl("./my-locales.json"));
       }
+      
+      /**
+      * if we know the status set the user as logged in or not
+      */
+      _statusKnown(){
+        if(this.user){
+          this.dispatch('LOGGED_IN', true);
+          this.dispatch('USER', this.user);
+        } else {
+          this.dispatch('LOGGED_IN', false);
+          this.dispatch('USER', null);
+        }
+      }
+      /**
+      * toggles the drawer
+      */
       _drawer(){
             this.dispatch('DRAWER', this.drawer);
       }
+      /**
+      * set from the meda query 
+      */
       _mobile(){
         this.dispatch('MOBILE', this.mobile);
         if(!this.mobile){
@@ -147,6 +204,9 @@
             header.fixed = true;
         }
       }
+      /**
+      * sets the default page and closes the drawer 
+      */
       _routePageChanged(page){
         if (page === undefined) {
           return;
@@ -154,7 +214,12 @@
         this.page = page || 'view1';
         this.drawer = false
       }
+      /**
+      * fired when the page changes 
+      */
       _pageChanged(page){
+        this.dispatch('PAGE', page);
+
         const resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
         Polymer.importHref(
             resolvedPageUrl,
@@ -162,6 +227,9 @@
             this._showPage404.bind(this),
             true);
       }
+      /**
+      * sets the page if aroute is not found 
+      */
       _showPage404(){
         this.page = 'view404';
       }

@@ -103,9 +103,6 @@
     paper-input {
         margin-bottom:10px;
     }
-
-
-
     small{
         @apply(--small-text);
     }
@@ -139,31 +136,32 @@
     }
     </style>
 
-    <firebase-auth app-name="bkawkfirebase" id="authid" user="{{user}}" provider="{{provider}}" on-error="_loginError"></firebase-auth>
+    <firebase-auth app-name="bkawkfirebase" id="auth" user="{{user}}" provider="{{provider}}" on-error="_loginError"></firebase-auth>
+    <firebase-document path="/users/{{uid}}" data="{{userData}}" id="userDoc" app-name="bkawkfirebase">
+
+</firebase-document>
     <div class="outer-container" on-tap="_close">
         <div class="container" onclick="event.stopPropagation()" id="container">
-            <h2>{{localize('login')}}</h2>
-            <paper-button on-tap="_facebookLogin" class="provider">{{localize('login-with-facebook')}}</paper-button>
-            <paper-button on-tap="_twitterLogin" class="provider twitter">{{localize('login-with-twitter')}}</paper-button>
-            <div class="divider"><div class="or">or</div></div>
-            <paper-input 
-                label="{{localize('email')}}" 
-                value="{{email}}" 
-                required 
-                no-label-float
-                id="email"
-                error-message="please enter a valid email address"
-                on-keydown="_submitOnEnter"></paper-input>
-            <paper-input 
-                label="{{localize('password')}}" 
-                value="{{password}}" 
-                type="password" 
-                required 
-                no-label-float
-                id="password"
-                error-message="Please enter a password"
-                on-keydown="_submitOnEnter"></paper-input>
-            <paper-button on-tap="_emailCheck" class="save">{{localize('login')}}</paper-button>
+<!-- Login -->
+            <template is="dom-if" if="{{!compile}}">
+                <h2>{{localize('login')}}</h2>
+                <paper-button on-tap="_facebookLogin" class="provider">{{localize('login-with-facebook')}}</paper-button>
+                <paper-button on-tap="_twitterLogin" class="provider twitter">{{localize('login-with-twitter')}}</paper-button>
+                <div class="divider"><div class="or">or</div></div>
+                <paper-input label="{{localize('email')}}" value="{{email}}" required no-label-float id="email" error-message="please enter a valid email address" on-keydown="_submitOnEnter"></paper-input>
+                <paper-input label="{{localize('password')}}" value="{{password}}" type="password" required no-label-float id="password" error-message="Please enter a password" on-keydown="_submitOnEnter"></paper-input>
+                <paper-button on-tap="_emailCheck" class="save">{{localize('login')}}</paper-button>
+            </template>
+<!-- Questions -->
+            <template is="dom-if" if="{{compile}}">
+                <h2>{{localize('almost-done')}}</h2>
+                <paper-input label="Full Name" value="{{saveFullName}}" required id="saveFullName" error-message="please enter a valid full name" on-keydown="_saveOnEnter"></paper-input>
+                <paper-input label="{{localize('email')}}" value="{{saveEmail}}" required id="saveEmail" error-message="please enter a valid email address" on-keydown="_saveOnEnter"></paper-input>
+                <paper-input label="{{localize('password')}}" value="{{savePassword}}" type="password" required id="savePassword" error-message="Please enter a password longer than 6 charecters" on-keydown="_saveOnEnter"></paper-input>
+                <paper-input label="Username" value="{{saveUsername}}" required id="saveUsername" error-message="please enter a valid Username" on-keydown="_saveOnEnter"></paper-input>
+                <paper-button on-tap="_compileCheck" class="save">{{localize('save')}}</paper-button>
+            </template>
+
         </div>
     </div>
     <div class="overlay" id="overlay"></div>
@@ -186,6 +184,12 @@
         return Object.assign({
             SHOW_LOGIN: function(showLogin){
                 return { type: 'SHOW_LOGIN', showLogin: showLogin}
+            },
+            LOGGED_IN: function(loggedIn){
+                return { type: 'LOGGED_IN', loggedIn: loggedIn}
+            },
+            USER: function(user){
+                return { type: 'USER', user: user}
             }
         });
     }
@@ -208,28 +212,99 @@
                 type: String,
                 statePath: 'language',
                 observer: '_language'
+            },
+            userData:{
+                type: Object,
+                observer: '_userData'
+            },
+            compile: {
+                type: Boolean,
+                value: false,
             }
         };
     }
 
-        _loginError(e){}
+        _saveOnEnter(e){
+            if(e.keyCode === 13){this._compileCheck(e)}
+        }
+        _compileCheck(e){
+            e.stopPropagation()
+            var saveFullName = this.$$("#saveFullName").validate();
+            if(saveFullName){
+                this.$$("#saveFullName").invalid = false;
+            }
+            var saveEmail = this._validateEmail(this.$$("#saveEmail").value);
+            if(!saveEmail){
+                this.$$("#saveEmail").invalid = true;
+            } else {
+                this.$$("#saveEmail").invalid = false;
+            }
+            if(this.savePassword){
+                if(this.savePassword.length > 5 ){
+                    this.$$("#savePassword").invalid = false;
+                } else {
+                    this.$$("#savePassword").invalid = true;
+                }
+            } else {
+                this.$$("#savePassword").invalid = true;
+            }
+            var saveUsername = this.$$("#saveUsername").validate();
+            if(saveUsername){
+                this.$$("#saveUsername").invalid = false;
+            }
+            if(this.saveFullName && this.saveEmail && this.savePassword && this.saveUsername){     
+                var path = this.user.uid;           
+                this.$.userDoc.path = null
+                this.$.userDoc.data =  {"name": this.saveFullName, "email": this.saveEmail, "password": this.savePassword, "username": this.saveUsername};
+                this.$.userDoc.save('users', path);
+                var credential = firebase.auth.EmailAuthProvider.credential(this.saveEmail, this.savePassword);
+                this.$.auth.auth.currentUser.link(credential).then(function(user) {
+                    this._loggedIn();
+                }.bind(this)).catch(function(user) {
+                    this._loggedIn();
+                })
+            }
+        }
+        _userData(){
+            if(this.userData && this.user){
+                if(this.userData.email && this.userData.name && this.userData.username && this.userData.password){
+                    this._loggedIn();
+                } else {
+                    this.compile = true;
+                    if(this.user.displayName || this.userData.name){ this.saveFullName = this.user.displayName || this.userData.name }
+                    if(this.user.email || this.userData.email) { this.saveEmail = this.user.email || this.userData.email }
+                }
+            }
+        }
+        _loggedIn(){
+            this.compile = false;
+            this.dispatch('LOGGED_IN', true);
+            this.dispatch('SHOW_LOGIN', false);
+            this.dispatch('USER', this.user);
+        }
+        _loginError(e){ 
+            console.log(e)
+        }
         _facebookLogin(e){
             e.stopPropagation()
             this.provider = 'facebook' 
-            this.$.authid.signInWithPopup().then(function(response) {
-                console.log(response);
-            }).catch(function(error) {
-                console.log(error.code);
+            this.$.auth.signInWithPopup().then(function(response) {
+                this.credential = response.credential
+                this.user = response.user
+                this.uid = response.user.uid
+            }.bind(this)).catch(function(error) {
+                console.log(error);
             });
-
         }
         _twitterLogin(e){
             e.stopPropagation()
             this.provider = 'twitter'
-            this.$.authid.signInWithPopup().then(function(response) {
-                console.log(response);
-            }).catch(function(error) {
-                console.log(error.code);
+            this.$.auth.signInWithPopup().then(function(response) {
+                this.credential = response.credential
+                this.user = response.user
+                this.uid = response.user.uid
+            }.bind(this)).catch(function(error) {
+                console.log(error);
             });
         }
         _submitOnEnter(e){
@@ -241,15 +316,15 @@
         }
         _emailCheck(e){
             e.stopPropagation()
-            var checkEmail = this._validateEmail(this.$.email.value);
+            var checkEmail = this._validateEmail(this.$$("#email").value);
             if(!checkEmail){
-                this.$.email.invalid=true;
+                this.$$("#email").invalid = true;
             } else {
-                this.$.email.invalid=false;
+                this.$$("#email").invalid = false;
             }
-            var checkPassword = this.$.password.validate();
+            var checkPassword = this.$$("#password").validate();
             if(checkPassword){
-                this.$.password.invalid=false;
+                this.$$("#password").invalid = false;
             }
             if(checkEmail && checkPassword){
                 this._emailLogin(e)
@@ -257,10 +332,9 @@
         }
         _emailLogin(e){
             e.stopPropagation()
-
             if (this.email && this.password) {
-                this.$.authid.signInWithEmailAndPassword(this.email, this.password).then(function(response) {
-                    console.log(response);
+                this.$.auth.signInWithEmailAndPassword(this.email, this.password).then(function(response) {
+                    this.uid = response.user.uid
                 }).catch(function(error) {
                     console.log(error.code);
                 });

@@ -145,6 +145,7 @@
             });
         }
         _selected(e){
+            this.selected = null
             this.selected = e.target.id;
             this.timer = setTimeout(function(){ 
                 this.animate = 'animateOut'
