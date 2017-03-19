@@ -7,6 +7,10 @@
 <link rel="import" href="components/my-preferences.html">
 <link rel="import" href="components/my-password.html">
 <link rel="import" href="components/my-notifications.html">
+<link rel="import" href="components/my-accounts.html">
+<link rel="import" href="components/my-score.html">
+<link rel="import" href="components/my-voting.html">
+<link rel="import" href="components/my-wallet.html">
 
 <link rel="import" href="my-redux.html">
 
@@ -87,33 +91,40 @@
       }
     </style>
 
-<div class="container">
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/settings/:selected"
+        data="{{routeData}}"
+        tail="{{subroute}}">
+    </app-route>
 
-  <iron-selector selected="{{selected}}" class="nav" fallbackSelection="3">
-      <div>My Profile</div>
-      <div>Friends</div>
-      <div>Messages</div>
-      <div>Preferences</div>
-      <div>Password</div>
-      <div>Notifications</div>
-      <div>Connected Accounts</div>
-      <div>Social Score</div>
-      <div>Voting Booth</div>
-      <div>Wallet</div>
+
+<div class="container">
+  <iron-selector attr-for-selected="name" selected="{{routeData.selected}}" class="nav" fallback-selection="profile">
+      <div name="profile">My Profile</div>
+      <div name="friends">Friends</div>
+      <div name="messages">Messages</div>
+      <div name="preferences">Preferences</div>
+      <div name="password">Password</div>
+      <div name="notifications">Notifications</div>
+      <div name="accounts">Connected Accounts</div>
+      <div name="score">Social Score</div>
+      <div name="voting" >Voting Booth</div>
+      <div name="wallet">Wallet</div>
   </iron-selector>
 
-<iron-pages selected="{{selected}}" class="content">
-  <my-profile></my-profile>
-  <my-friends></my-friends>
-  <my-messages></my-messages>
-  <my-preferences></my-preferences>
-  <my-password></my-password>
-  <my-notifications></my-notifications>
-  <div>Six</div>
-  <div>Seven</div>
-  <div>Eight</div>
-  <div>Nine</div>
-  <div>Ten</div>
+<iron-pages attr-for-selected="name" selected="{{routeData.selected}}" class="content">
+  <my-profile name="profile"></my-profile>
+  <my-friends name="friends"></my-friends>
+  <my-messages name="messages"></my-messages>
+  <my-preferences name="preferences"></my-preferences>
+  <my-password name="password"></my-password>
+  <my-notifications name="notifications"></my-notifications>
+  <my-accounts name="accounts"></my-accounts>
+  <my-score name="score"></my-score>
+  <my-voting name="voting"></my-voting>
+  <my-wallet name="wallet"></my-wallet>
 </iron-pages>
 
 
@@ -133,10 +144,9 @@
                 type: Boolean,
                 statePath: 'mobile',
                 observer: '_mobile',
-            },
+            }
         };
     }
-
 
     }
     window.customElements.define(Mysettings.is, Mysettings);

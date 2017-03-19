@@ -90,7 +90,9 @@
     <div class$="{{animate}} drop-down-container">
         <div class="drop-down" on-mouseleave="_closeDropDown" on-mouseover="_openDropDown">
             <template is="dom-repeat" items="{{optionsArray}}">
-                <div class="item" on-click="_selected" id="{{item}}">{{item}}</div>
+                <a href="/settings/">
+                    <div class="item" on-click="_selected" id="{{item}}">{{item}}</div>
+                </a>
             </template>
         </div>
     </div>

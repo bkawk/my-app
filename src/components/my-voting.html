@@ -1,0 +1,79 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../my-redux.html">
+
+<dom-module id="my-voting">
+  <template>
+    <style include="shared-styles">
+        :host {
+            display: block;
+        }
+        .heading{
+            width: 100%;
+            border-bottom: 1px solid var(--app-background-color);
+            color: var(--toolbar-font-color);
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .heading-text{
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px
+        }
+        .footer{
+            width: 100%;
+            border-top: 1px solid var(--app-background-color);
+        }
+        .buttons{
+            text-align:right;
+        }
+        .buttons paper-button{
+            max-width: 150px;
+            height: 35px;
+            margin-right:15px;
+            margin-top:15px;
+            margin-bottom:10px;
+        }
+
+    </style>
+        <div class="heading">
+            <div class="heading-text">
+                Voting Booth
+            </div>
+        </div>
+Score</br>
+Change</br>
+</br></br></br></br></br></br></br></br></br>
+        <div class="footer">
+            <div class="buttons">
+                <paper-button>Save</paper-button>
+            </div>
+        </div>
+
+
+    </template>
+
+    <script>
+    class MyVoting extends ReduxMixin(Polymer.Element) {
+
+    connectedCallback() {
+        super.connectedCallback();
+    }
+
+    static get is() { 
+        return 'my-voting'; 
+    }
+
+    static get properties() {
+        return {
+            drawer: {
+                type: Boolean,
+                notify: true,
+            }
+        };
+    }
+
+    }
+    window.customElements.define(MyVoting.is, MyVoting);
+</script>
+</dom-module>

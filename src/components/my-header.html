@@ -54,7 +54,7 @@
             <a href="/" class="logo"><img src="../../images/logo.svg" on-tap="_goHome"></a>
             <template is="dom-if" if="{{loggedIn}}">
                 <my-dropdown 
-                    options="Settings,Logout" 
+                    options="Settings,Logout"
                     selected="{{userMenu}}" 
                     columns="1">
                     <iron-image src="{{user.photoURL}}" class="avatar" sizing="cover" preload fade></iron-image>
