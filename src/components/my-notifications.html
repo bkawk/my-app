@@ -2,7 +2,7 @@
 <link rel="import" href="../shared-styles.html">
 <link rel="import" href="../my-redux.html">
 
-<dom-module id="my-profile">
+<dom-module id="my-notifications">
   <template>
     <style include="shared-styles">
         :host {
@@ -38,18 +38,18 @@
     </style>
         <div class="heading">
             <div class="heading-text">
-                My Profile
+                My Notifications
             </div>
         </div>
-Photo</br>
-Full Name</br>
-User Name</br>
-website</br>
-location</br>
-bio</br>
-email address</br>
-birthday</br>
-gender</br></br></br></br></br></br>
+Email</br>
+---When x</br>
+---When y</br>
+---When z</br></br>
+Notifications</br>
+---When x</br>
+---When y</br>
+---When z</br>
+</br></br></br></br></br></br></br></br></br>
         <div class="footer">
             <div class="buttons">
                 <paper-button>Save</paper-button>
@@ -60,14 +60,14 @@ gender</br></br></br></br></br></br>
     </template>
 
     <script>
-    class MyProfile extends ReduxMixin(Polymer.Element) {
+    class MyNotifications extends ReduxMixin(Polymer.Element) {
 
     connectedCallback() {
         super.connectedCallback();
     }
 
     static get is() { 
-        return 'my-profile'; 
+        return 'my-notifications'; 
     }
 
     static get properties() {
@@ -80,6 +80,6 @@ gender</br></br></br></br></br></br>
     }
 
     }
-    window.customElements.define(MyProfile.is, MyProfile);
+    window.customElements.define(MyNotifications.is, MyNotifications);
 </script>
 </dom-module>

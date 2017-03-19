@@ -1,6 +1,14 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="components/my-profile.html">
+<link rel="import" href="components/my-friends.html">
+<link rel="import" href="components/my-messages.html">
+<link rel="import" href="components/my-preferences.html">
+<link rel="import" href="components/my-password.html">
+<link rel="import" href="components/my-notifications.html">
+
+<link rel="import" href="my-redux.html">
 
 <dom-module id="my-settings">
   <template>
@@ -34,6 +42,7 @@
         border-radius: 3px;
         margin-right: 18px;
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
+        height: auto
       }
       .nav .iron-selected{
         background-color: #f7f7f7;
@@ -80,7 +89,7 @@
 
 <div class="container">
 
-  <iron-selector selected="{{selected}}" class="nav" fallbackSelection="0">
+  <iron-selector selected="{{selected}}" class="nav" fallbackSelection="3">
       <div>My Profile</div>
       <div>Friends</div>
       <div>Messages</div>
@@ -95,24 +104,11 @@
 
 <iron-pages selected="{{selected}}" class="content">
   <my-profile></my-profile>
-  <div>
-    <div class="heading">
-      <div class="heading-text">
-        Friends
-      </div>
-    </div>
-<p>Somthing</p></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
-    <div class="footer">
-      <div class="buttons">
-        <paper-button>Save</paper-button>
-      </div>
-    </div>
-
-
-  </div>
-  <div>Three</div>
-  <div>Four</div>
-  <div>Five</div>
+  <my-friends></my-friends>
+  <my-messages></my-messages>
+  <my-preferences></my-preferences>
+  <my-password></my-password>
+  <my-notifications></my-notifications>
   <div>Six</div>
   <div>Seven</div>
   <div>Eight</div>
@@ -126,9 +122,23 @@
 
   <script>
     class Mysettings extends Polymer.Element {
-      static get is() { return 'my-settings'; }
+
+      static get is() { 
+        return 'my-settings'; 
+        }
+
+      static get properties() {
+        return {
+            mobile: {
+                type: Boolean,
+                statePath: 'mobile',
+                observer: '_mobile',
+            },
+        };
     }
 
+
+    }
     window.customElements.define(Mysettings.is, Mysettings);
   </script>
 </dom-module>

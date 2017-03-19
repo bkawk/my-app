@@ -159,14 +159,12 @@
     }
         _userMenu(){
             if(this.userMenu == 'Logout'){
-                console.log("Logout from my-header")
                 this.$$('#auth').signOut();
                 this.dispatch('LOGGED_IN', false);
                 this.dispatch('USER', null);
             }
             if(this.userMenu == 'Settings'){
-                console.log("settings");
-                    this.dispatch('PAGE', 'settings');
+                this.dispatch('PAGE', 'settings');
             }
         }
         _goHome(){

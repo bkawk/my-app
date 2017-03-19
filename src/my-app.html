@@ -31,6 +31,7 @@
 
     </style>
 
+<!--app and auth-->
     <firebase-auth app-name="bkawkfirebase" id="auth" user="{{user}}" online="{{online}}" status-known="{{statusKnown}}" signed-in="{{signedIn}}"></firebase-auth>
     <firebase-app 
         name="bkawkfirebase" 
@@ -40,11 +41,16 @@
         storage-bucket="the-app-4e238.appspot.com"
         messaging-sender-id="916383740318">
     </firebase-app>
-
+<!-- check for small screen-->
     <iron-media-query query="max-width: 415px" query-matches="{{mobile}}"></iron-media-query>  
-
-    <template is="dom-if" if="{{showInvite}}"><my-invite></my-invite></template>
-    <template is="dom-if" if="{{showLogin}}"><my-login></my-login></template>
+<!-- load two modals-->
+    <template is="dom-if" if="{{showInvite}}">
+        <my-invite></my-invite>
+    </template>
+    <template is="dom-if" if="{{showLogin}}">
+        <my-login></my-login>
+    </template>
+<!--routing-->
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -53,22 +59,22 @@
         tail="{{subroute}}">
     </app-route>
 
+<!-- Drawer content -->
     <app-drawer-layout force-narrow>
-      <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open opened="{{drawer}}">
         <my-drawer></my-drawer>
       </app-drawer>
-
-      <!-- Main content -->
+<!--header-->
       <app-header-layout>
         <app-header slot="header" condenses fixed effects="waterfall" id="appHeader">
             <my-header></my-header>
         </app-header>
+<!-- Main content -->
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-          <my-home name="home"></my-home>
-          <my-settings name="settings"></my-settings>
-          <my-view3 name="view3"></my-view3>
-          <my-view404 name="view404"></my-view404>
+            <my-home name="home"></my-home>
+            <my-settings name="settings"></my-settings>
+            <my-view3 name="view3"></my-view3>
+            <my-view404 name="view404"></my-view404>
         </iron-pages>
 
       </app-header-layout>
@@ -192,7 +198,7 @@
             this.dispatch('DRAWER', this.drawer);
       }
       /**
-      * set from the meda query 
+      * set from the meda query, release header on mobile, remove the drawer if we are not on a small screen
       */
       _mobile(){
         this.dispatch('MOBILE', this.mobile);
