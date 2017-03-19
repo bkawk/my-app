@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../my-redux.html">
+
+<dom-module id="my-profie">
+  <template>
+    <style include="shared-styles">
+        :host {
+            display: block;
+            background-color: red;
+            min-width: 500px;
+            min-height: 500px;
+            z-index: 999999;
+        }
+
+    </style>
+    <p>my-profile</p>
+    </template>
+
+    <script>
+    class MyProfile extends ReduxMixin(Polymer.Element) {
+
+    connectedCallback() {
+        super.connectedCallback();
+        console.log('connected!')
+    }
+
+    static get is() { 
+        return 'my-profie'; 
+    }
+
+    static get properties() {
+        return {
+            drawer: {
+                type: Boolean,
+                notify: true,
+            }
+        };
+    }
+
+
+
+    }
+    window.customElements.define(MyProfile.is, MyProfile);
+</script>
+</dom-module>

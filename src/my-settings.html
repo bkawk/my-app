@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="components/my-profile.html">
 
 <dom-module id="my-settings">
   <template>
@@ -19,6 +20,7 @@
         padding-top:5px;
         padding-bottom:5px;
         width: 100%;
+        height: auto;
         background-color: white;
         border-radius: 3px;
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
@@ -35,18 +37,44 @@
       }
       .nav .iron-selected{
         background-color: #f7f7f7;
-        font-weight: 400;
+        font-weight: 500;
       }
       .nav div{
         font-weight: 300;
         color: var(--toolbar-font-color);
-        padding-left: 10px;
+        padding-left: 18px;
         font-size: 12px;
         line-height:30px;
         cursor: pointer;
       }
       .nav div:hover{
         font-weight: 400;
+      }
+      .heading{
+        width: 100%;
+        border-bottom: 1px solid var(--app-background-color);
+        color: var(--toolbar-font-color);
+        font-size: 18px;
+        font-weight: 500;
+      }
+      .heading-text{
+        margin-left: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px
+      }
+      .footer{
+        width: 100%;
+        border-top: 1px solid var(--app-background-color);
+      }
+      .buttons{
+        text-align:right;
+      }
+      .buttons paper-button{
+        max-width: 150px;
+        height: 35px;
+        margin-right:15px;
+        margin-top:15px;
+        margin-bottom:10px;
       }
     </style>
 
@@ -55,18 +83,33 @@
   <iron-selector selected="{{selected}}" class="nav" fallbackSelection="0">
       <div>My Profile</div>
       <div>Friends</div>
+      <div>Messages</div>
       <div>Preferences</div>
       <div>Password</div>
       <div>Notifications</div>
       <div>Connected Accounts</div>
-      <div>Toxic Score</div>
-      <div>Town Hall</div>
+      <div>Social Score</div>
+      <div>Voting Booth</div>
       <div>Wallet</div>
   </iron-selector>
 
 <iron-pages selected="{{selected}}" class="content">
-  <div>One</div>
-  <div>Two</div>
+  <my-profile></my-profile>
+  <div>
+    <div class="heading">
+      <div class="heading-text">
+        Friends
+      </div>
+    </div>
+<p>Somthing</p></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
+    <div class="footer">
+      <div class="buttons">
+        <paper-button>Save</paper-button>
+      </div>
+    </div>
+
+
+  </div>
   <div>Three</div>
   <div>Four</div>
   <div>Five</div>
