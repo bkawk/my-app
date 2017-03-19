@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../my-redux.html">
+
+<dom-module id="my-drawer">
+  <template>
+    <style include="shared-styles">
+        :host {
+            display: block;
+        }
+
+    </style>
+
+
+
+    </template>
+
+    <script>
+    class MyDrawer extends ReduxMixin(Polymer.Element) {
+
+    connectedCallback() {
+        super.connectedCallback();
+    }
+
+    static get is() { 
+        return 'my-drawer'; 
+    }
+
+    static get properties() {
+        return {
+            drawer: {
+                type: Boolean,
+                notify: true,
+            }
+        };
+    }
+
+
+
+    }
+    window.customElements.define(MyDrawer.is, MyDrawer);
+</script>
+</dom-module>

@@ -19,6 +19,7 @@
 <link rel="import" href="components/my-header.html">
 <link rel="import" href="components/my-invite.html">
 <link rel="import" href="components/my-login.html">
+<link rel="import" href="components/my-drawer.html">
 <link rel="import" href="my-redux.html">
 
 <dom-module id="my-app">
@@ -55,6 +56,7 @@
     <app-drawer-layout force-narrow>
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open opened="{{drawer}}">
+        <my-drawer></my-drawer>
       </app-drawer>
 
       <!-- Main content -->
@@ -63,8 +65,8 @@
             <my-header></my-header>
         </app-header>
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-          <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
+          <my-home name="home"></my-home>
+          <my-settings name="settings"></my-settings>
           <my-view3 name="view3"></my-view3>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
@@ -109,7 +111,7 @@
         type: String,
         reflectToAttribute: true,
         statePath: 'page',
-        value: 'view1',
+        value: 'home',
         observer: '_pageChanged',
       },
       /**
@@ -211,7 +213,7 @@
         if (page === undefined) {
           return;
         }
-        this.page = page || 'view1';
+        this.page = page || 'home';
         this.drawer = false
       }
       /**

@@ -2,7 +2,7 @@
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="my-redux.html">
 
-<dom-module id="my-view1">
+<dom-module id="my-home">
   <template>
     <style include="shared-styles">
       :host {
@@ -24,13 +24,13 @@
   </template>
 
   <script>
-    class MyView1 extends ReduxMixin(Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element)) {
+    class Myhome extends ReduxMixin(Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element)) {
       connectedCallback() {
           super.connectedCallback();
           this.loadResources(this.resolveUrl("./my-locales.json"));
       }
       static get is() { 
-        return 'my-view1'; 
+        return 'my-home'; 
       }
       static get properties() {
         return {
@@ -45,6 +45,6 @@
         this.language = this.setLanguage;
       }
     }
-    window.customElements.define(MyView1.is, MyView1);
+    window.customElements.define(Myhome.is, Myhome);
   </script>
 </dom-module>

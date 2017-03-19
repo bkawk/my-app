@@ -51,7 +51,7 @@
             <template is="dom-if" if="{{mobile}}">
                 <paper-icon-button icon="menu" flat on-click="_toggleDrawer"></paper-icon-button>
             </template>
-            <a href="/" class="logo"><img src="../../images/logo.svg" ></a>
+            <a href="/" class="logo"><img src="../../images/logo.svg" on-tap="_goHome"></a>
             <template is="dom-if" if="{{loggedIn}}">
                 <my-dropdown 
                     options="Settings,Logout" 
@@ -166,8 +166,11 @@
             }
             if(this.userMenu == 'Settings'){
                 console.log("settings");
-                 this.dispatch('PAGE', 'view2');
+                    this.dispatch('PAGE', 'settings');
             }
+        }
+        _goHome(){
+            this.dispatch('PAGE', 'home');
         }
         _defaultLanguage(){
             this.language = this.defaultLanguage

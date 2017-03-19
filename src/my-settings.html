@@ -1,0 +1,91 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-settings">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        width: 100%;
+        margin: auto;
+        max-width: var(--app-fixed-width);
+        padding: 10px;
+      }
+      .container{
+        padding-top:10px;
+        @apply(--layout-horizontal);
+      }
+      .content{
+        padding-top:5px;
+        padding-bottom:5px;
+        width: 100%;
+        background-color: white;
+        border-radius: 3px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
+        @apply(--layout-flex);
+      }
+      .nav{
+        padding-bottom: 10px;
+        padding-top: 10px;
+        min-width: 200px;
+        background-color: white;
+        border-radius: 3px;
+        margin-right: 18px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
+      }
+      .nav .iron-selected{
+        background-color: #f7f7f7;
+        font-weight: 400;
+      }
+      .nav div{
+        font-weight: 300;
+        color: var(--toolbar-font-color);
+        padding-left: 10px;
+        font-size: 12px;
+        line-height:30px;
+        cursor: pointer;
+      }
+      .nav div:hover{
+        font-weight: 400;
+      }
+    </style>
+
+<div class="container">
+
+  <iron-selector selected="{{selected}}" class="nav" fallbackSelection="0">
+      <div>My Profile</div>
+      <div>Friends</div>
+      <div>Preferences</div>
+      <div>Password</div>
+      <div>Notifications</div>
+      <div>Connected Accounts</div>
+      <div>Toxic Score</div>
+      <div>Town Hall</div>
+      <div>Wallet</div>
+  </iron-selector>
+
+<iron-pages selected="{{selected}}" class="content">
+  <div>One</div>
+  <div>Two</div>
+  <div>Three</div>
+  <div>Four</div>
+  <div>Five</div>
+  <div>Six</div>
+  <div>Seven</div>
+  <div>Eight</div>
+  <div>Nine</div>
+  <div>Ten</div>
+</iron-pages>
+
+
+
+  </template>
+
+  <script>
+    class Mysettings extends Polymer.Element {
+      static get is() { return 'my-settings'; }
+    }
+
+    window.customElements.define(Mysettings.is, Mysettings);
+  </script>
+</dom-module>
